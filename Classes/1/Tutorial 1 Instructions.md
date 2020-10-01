@@ -1,7 +1,4 @@
----
-title: Lecture 1 Tutorial - Installing packages
-output: html_notebook
----
+# Tutorial 1
 
 ## Connect to FarmShare
 ```bash
@@ -88,6 +85,8 @@ chmod +x ~/miniconda3/envs/singlecell/bin/faToTwoBit
 
 wget --quiet http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/genePredToGtf -O ~/miniconda3/envs/singlecell/bin/genePredToGtf
 chmod +x ~/miniconda3/envs/singlecell/bin/genePredToGtf
+echo -e "db.host=genome-mysql.soe.ucsc.edu\ndb.user=genomep\ndb.password=password\ncentral.db=hgcentral" > ~/.hg.conf
+chmod 600 ~/.hg.conf
 
 wget --quiet https://ccb.jhu.edu/software/tophat/downloads/tophat-2.1.1.Linux_x86_64.tar.gz
 tar -xzf tophat-2.1.1.Linux_x86_64.tar.gz
@@ -124,8 +123,9 @@ cd
 echo 'export PATH="/home/<SUNetID>/R/bin:$PATH"' >> ~/.bashrc
 echo 'module load gcc/9.3.0' >> ~/.bashrc
 echo -e "AR=gcc-ar\nNM=gcc-nm\nRANLIB=gcc-ranlib" > ~/.Renviron
-echo ‘options(Ncpus = 8)’ >> ~/.Rprofile
+echo -e "options(Ncpus = 4)\nmessage('\033[38;05;208mHi <Name>, welcome to R...\033[00m')\nSys.setenv(RETICULATE_PYTHON = '/home/<SUNetID>/miniconda3/envs/singlecell/bin/python')" >> ~/.Rprofile
 source ~/.bashrc
+
 ```
 
 ## Check that R is installed
@@ -166,19 +166,25 @@ IRkernel::installspec(user = TRUE)
 q()
 ```
 
-## Launch jupyter notebook
+## Clone the class GitHub repository
+git clone https://github.com/ktravaglini/BIOC281.git
+
+
+## Create an SSH tunnel (on your system)
+```bash
+# On a mac
+ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@riceXX.stanford.edu
+```
+On windows: PuTTY (Configuration -> Connection -> SSH -> Tunnel)
+
+## Launch Jupyter
 ```bash
 jupyter lab --no-browser
 ```
 
-## Forward ports (!IMPORTANT: run on YOUR computer, not RICE)
-```bash
-# On a mac
-ssh -N -f -L 8888:localhost:8888 <SUNetID>@riceXX.stanford.edu
-```
-On windows: PuTTY (Configuration -> Connection -> SSH -> Tunnel)
+## Login to jupyter in your browser and open a Terminal window (continue there)
+While you are working through the R installs (some of them can take time), please open BIOC281/Classes1/Tutorial.ipynb through jupyter and begin working through the exercise. Periodically check the terminal to see if the package installations have completed.
 
-## Connect in your browser to jupyter and start data analysis exercise
 
 ## Download CytoTRACE
 ```bash
@@ -196,7 +202,7 @@ R
 install.packages("Seurat")
 ```
 
-## Install CytoTRACE (in R)
+## Install CytoTRACE
 ```R
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -206,7 +212,7 @@ BiocManager::install("sva")
 devtools::install_local("~/CytoTRACE_0.3.3.tar.gz")
 ```
 
-## Install monocle3 (in R) and quit R
+## Install monocle3 and quit R
 ```R
 BiocManager::install(c('BiocGenerics', 'DelayedArray', 'DelayedMatrixStats', 'limma', 'S4Vectors', 'SingleCellExperiment', 'SummarizedExperiment', 'batchelor', 'Matrix.utils'))
 
