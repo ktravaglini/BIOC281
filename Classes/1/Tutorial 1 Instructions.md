@@ -69,7 +69,7 @@ conda create --name singlecell python=3.8.5
 ```bash
 conda activate singlecell
 ```
-# Moving forward, when using pip, install all python packages within "singlecell" environment after activating it and not in the "base" environment
+## Moving forward, when using pip, install all python packages within "singlecell" environment after activating it and not in the "base" environment
 
 ## Install scanpy, jupyter, MulticoreTSNE, bbknn, velocyto, samtools, and kallisto with conda and pip
 ```bash
@@ -242,8 +242,8 @@ http://localhost:9999/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a
 ```
 
 ## You can now access terminal in the browser window connected to Jupyter running on rice
-## Now we will start installing R packages in the terminal connected to rice
-## While you are working through the R installs (some of them can take a while), please open BIOC281/Classes1/Tutorial.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically go back check the terminal to see if the package installations have completed.
+### Now we will start installing R packages in the terminal connected to rice
+### While you are working through the R installs (some of them can take a while), please open BIOC281/Classes1/Tutorial.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically go back check the terminal to see if the package installations have completed.
 
 ## Make sure that the terminal in Jupyter in the browser has started with the "base" environment
 
