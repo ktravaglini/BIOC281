@@ -173,7 +173,6 @@ R
 ### Connect IRkernel to jupyter and quit R
 ```R
 IRkernel::installspec(user = TRUE)
-
 q()
 ```
 
