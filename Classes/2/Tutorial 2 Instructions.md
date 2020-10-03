@@ -85,7 +85,7 @@ bedtools maskfasta -fi hg38.RefSeq.mini.ERCC.fa -bed PAR1_2.bed -fo hg38.RefSeq.
 bedtools maskfasta -fi hg38.RefSeq.mini.ERCC.fa -bed chrY.bed -fo hg38.RefSeq.mini.YhMSK.ERCC.fa
 ```
 
-### To explore the newly created genomes efficintly convert the fasta to 2bit format
+### To explore the newly created genomes efficiently convert the fasta to 2bit format
 ```bash
 faToTwoBit hg38.RefSeq.mini.PARYhMSK.ERCC.fa hg38.RefSeq.mini.PARYhMSK.ERCC.2bit
 faToTwoBit hg38.RefSeq.mini.YhMSK.ERCC.fa hg38.RefSeq.mini.YhMSK.ERCC.2bit
@@ -100,7 +100,7 @@ less par1.fa
 less par2.fa
 ```
 
-### Test the original before masking
+### Test the original minigenome before masking
 ```bash
 faToTwoBit hg38.RefSeq.mini.ERCC.fa hg38.RefSeq.mini.ERCC.2bit
 twoBitToFa hg38.RefSeq.mini.ERCC.2bit par1_normal.fa -seq=chrY -start=9981 -end=2781499
@@ -134,7 +134,7 @@ cd ../GenomeIndex/STARIndex/100bp_PRMSK/
 ln -sv ../../../GenomeFasta/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
 ln -sv ../../../Annotation/hg38.refGene.ERCC.gtf
 ```
-#### Create a STARIndex script. We have created text files using echo earlier now we will learn how we can use cat to do the same. This is also the same command we used to concatenate compressed or uncompressed files. You can inspect the script by less as shown above or edit using vim/vi or your favorite text editor.
+#### Create a STARIndex script. We have created text files using echo earlier, now we will learn how we can use cat to do the same. This is also the same command we used to concatenate compressed or uncompressed files. You can inspect the script by less as shown above or edit using vim/vi or your favorite text editor.
 ```bash
 cat > ./createPARYMSKSTARIndex_scr << EOF
 #!/bin/bash
@@ -160,11 +160,11 @@ ssh <SUNetID>@stanford.edu
 
 ### From the new rice session connect to the same whaeat node that was allocated to you earlier and is running STAR to generate Index and activate "singlecell". this way you can run multiple terminal sessions to work concurrently.
 ```bash
-ssh wheat<XX>@stanford.edu
+ssh wheat<XX>.stanford.edu
 conda activate singlecell
 ```
 
-### Change to the appropriate directory and create script for creating Index now for the Complete Y masked minigenome. Notice that the Annotation remains the same for different versions of the masked genomes
+### Change to the appropriate directory and create script for creating Index, this time for the Complete Y masked minigenome. Notice that the annotation remains the same for different versions of the masked genomes
 ```bash
 cd ~/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_YMSK
 
@@ -179,13 +179,13 @@ STAR --runThreadN 4 --runMode genomeGenerate \
 EOF
 ```
 
-### Wait for the first Index generation in the previos terminal to finish before running your new script. "STAR --runmode genomegenerate" takes 21-25G of RAM even with the minigenome and we requested only 30G as memory for our use.
+### Wait for the first Index generation in the previos terminal to finish before running your new script. "STAR --runmode genomegenerate" takes 21-25G of RAM even with the minigenome, and we requested only 30G as memory for our use.
 ```bash
 bash createYMSKSTARIndex_scr
 ```
 
 ### Move back to your first terminal and prepare Index for 10x Cellranger, which also uses STAR. Create directories and softlinks for appropriate gennome fasta and annotation GTF
-bash```
+```bash
 cd ~/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/
 mkdir 10xIndex && cd 10xIndex
 ln -sv ../../GenomeFasta/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
@@ -197,7 +197,7 @@ ln -sv ../../Annotation/hg38.refGene.ERCC.gtf
 cellranger mkgtf ./hg38.refGene.ERCC.gtf ./hg38.refGene.ERCC.filtered.gtf --attribute=gene_biotype:protein_coding
 ```
 
-### Now we  use the filtered annotation to prepare 10X reference genome Index
+### Now we use the filtered annotation to prepare 10X reference genome Index
 ```bash
 cellranger mkref --genome=hg38.PARYhMSK.ERCC --fasta=hg38.RefSeq.mini.PARYhMSK.ERCC.fa --genes=hg38.refGene.ERCC.filtered.gtf
 ```
@@ -210,7 +210,7 @@ cellranger --transcriptome=/home/sinhar/BIOC281/Classes/2/RefSeq_Oct2020/GenomeI
 ```
 
 ### Build a kallisto index
-#### Either open a new Terminal window while 10X STAR Index is being built and proceed as below: first download the whole genome fasta then build transcriptome fasta using hg38 genome fasta and annotation and finally clean the messy transcript names with a perl oneliner "https://github.com/trinityrnaseq/Griffithlab_rnaseq_tutorial_wiki/blob/master/Kallisto.md"
+#### Either open a new Terminal window while 10X STAR Index is being built, or move back to a previously open terminal that is idle and proceed as below: first download the whole genome fasta, then build transcriptome fasta using hg38 genome fasta and annotation, and finally clean the messy transcript names with a perl oneliner "https://github.com/trinityrnaseq/Griffithlab_rnaseq_tutorial_wiki/blob/master/Kallisto.md"
 ```bash
 cd ~/BIOC281/Classes/2/RefSeq_Oct2020/GenomeFasta
 wget --quiet http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
@@ -236,7 +236,7 @@ less hg38.refGene.ERCC.transcriptome.clean.fa
 kallisto index -i hg38.refSeq.transcriptome.ERCC.idx ./hg38.refGene.ERCC.transcriptome.clean.fa --make-unique
 ```
 
-## Common theme: all mappers/aligners of NGS data (fastq) require a step where you create a genome index which speeds up the mapping process. Some mappers like STAR also insert annotation information in the genome index so while mapping the program is aware of known (user provided) splice-junctions-- further speeding up the mapping/alignment process. We encourage you to look up other popular mappers and their genome index generation process like bowtie2, tophat, hisat2, bwa, all genome based mappers, and salmon, which is another transcriptome based mapper similar to kallisto.
+### Common theme: all mappers/aligners of NGS data (fastq) require a step where you create a genome index which speeds up the mapping process. Some mappers like STAR also insert annotation information in the genome index so while mapping the program is aware of known (user provided) splice-junctions-- further speeding up the mapping/alignment process. We encourage you to look up other popular mappers and their genome index generation process like bowtie2, tophat, hisat2, bwa, all of which are genome based mappers, and salmon, which is another transcriptome based mapper similar to kallisto.
 
-# Mapping fastq reads using STAR
+## Mapping fastq reads using STAR
 ### The script below is adapted from ENCODE long-mRNA protocol
