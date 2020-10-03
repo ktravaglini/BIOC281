@@ -94,6 +94,14 @@ cp ~/tophat-2.1.1.Linux_x86_64/gtf_to_fasta ~/miniconda3/envs/singlecell/bin/
 rm -fr ~/*tophat*
 ```
 
+### Install Cell Ranger from 10X Genomics. The download page requires signup "https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest". Either signup and follow wget or curl download instruction or to avoid that simply download a pre-downloaded copy.
+```bash
+wget --quiet http://hsc.stanford.edu/resources/cellranger-4.0.0.tar.gz
+tar xf ~/cellranger-4.0.0.tar.gz
+echo 'export PATH="$HOME/cellranger-4.0.0:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
 ### Configure environment To access MariaDB server at UCSC and use their tools and utilities. Details: "https://genome.ucsc.edu/goldenPath/help/mysql.html"
 ```bash
 echo -e "#US MariaDB server\ndb.host=genome-mysql.soe.ucsc.edu\ndb.user=genomep\ndb.password=password\ncentral.db=hgcentral\ncentral.host=genome-mysql.soe.ucsc.edu\ncentral.user=genomep\ncentral.password=password\ngbdbLoc1=http://hgdownload.soe.ucsc.edu/gbdb/\nforceTwoBit=on" > ~/.hg.conf
