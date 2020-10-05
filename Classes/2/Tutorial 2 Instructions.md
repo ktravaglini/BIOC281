@@ -128,7 +128,7 @@ less ERCC92.fa
 less hg38.refGene.ERCC.gtf
 ```
 
-### Build the STAR genome indices. We need both the genome fasta and the annotation GTF for this purpose
+### Build the STAR genome indices. We need both the genome fasta and the annotation GTF for this purpose. Instead of copying files create softlinks
 ```bash
 cd ../GenomeIndex/STARIndex/100bp_PRMSK/
 ln -sv ../../../GenomeFasta/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
@@ -239,4 +239,196 @@ kallisto index -i hg38.refSeq.transcriptome.ERCC.idx ./hg38.refGene.ERCC.transcr
 ### Common theme: all mappers/aligners of NGS data (fastq) require a step where you create a genome index which speeds up the mapping process. Some mappers like STAR also insert annotation information in the genome index so while mapping the program is aware of known (user provided) splice-junctions-- further speeding up the mapping/alignment process. We encourage you to look up other popular mappers and their genome index generation process like bowtie2, tophat, hisat2, bwa, all of which are genome based mappers, and salmon, which is another transcriptome based mapper similar to kallisto.
 
 ## Mapping fastq reads using STAR
-### The script below is adapted from ENCODE long-mRNA protocol
+### Download fastq data and explore fastq files using less
+```bash
+cd ~/BIOC281/Classes/2/
+wget -r -np -nH --cut-dirs=1 --reject=index* http://hsc.stanford.edu/resources/fastq/
+```
+
+### Create STAR mapping script. Thhis script is adapted from ENCODE long-mRNA protocol 
+```bash
+cat > STARmale_scr << EOF
+#!/bin/bash
+
+## Set reference genome, genome indexes, junction and annotation database directory paths
+REF=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_PRMSK
+GFA=\$REF/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
+ANN=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
+FTQ=\$HOME/BIOC281/Classes/2/fastq/male
+
+## Set parameters
+CmmnPrms="--runThreadN 4 --outSJfilterReads Unique --outFilterType BySJout --outSAMunmapped Within \\
+--outSAMattributes NH HI AS nM NM MD jM jI XS MC ch --outFilterMultimapNmax 20 --outFilterMismatchNmax 999 --alignIntronMin 20 \\
+--outFilterMismatchNoverReadLmax 0.04 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \\
+--alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --sjdbScore 1"
+AdtlPrms="--outSAMtype BAM SortedByCoordinate --outBAMcompression 10 --limitBAMsortRAM 57000000000 \\
+--quantMode TranscriptomeSAM GeneCounts --quantTranscriptomeBAMcompression 10 --outSAMstrandField intronMotif"
+
+## Define directory structure for run
+export OWD=\`pwd\`
+export SCR=\$HOME/scratch_male
+export STR=\$SCR/STARun
+export RDIR=\$SCR/reads
+
+## create scratch run directory and read directory 
+mkdir -p \$RDIR
+
+## concatenate read files if they are split into multiple files
+cat \$FTQ/*R1*.fastq.gz > \$SCR/male_R1.fastq.gz
+cat \$FTQ/*R2*.fastq.gz > \$SCR/male_R2.fastq.gz
+
+## decompress read files
+gzip -d \$SCR/*.fastq.gz
+
+## Start skewer to trim reads for quality of base calls and remove adapter sequences at 3' ends
+cd \$RDIR
+
+### If Truseq Illumina adapters (obsolete) were used to prepare the library then use the following adapter sequences
+#skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
+#-y AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \\
+#-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet \$SCR/male_R1.fastq \$SCR/male_R2.fastq
+
+## If Nextera Illumina primers were used to prepare the library then use the following adapter sequences
+skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
+-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
+-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet \$SCR/male_R1.fastq \$SCR/male_R2.fastq
+
+### If custom CZBiohub IDT primers (Index=12bp) were used to prepare the library then use the following adapter sequences
+#skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
+#-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
+#-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet \$SCR/male_R1.fastq \$SCR/male_R2.fastq
+
+## Start STAR alignment
+mkdir -p \$STR/male_1p
+cd \$STR
+
+STAR \$CmmnPrms \$AdtlPrms --genomeDir \$REF --outFileNamePrefix \$STR/male_1p/male.1p. \\
+--readFilesIn \$RDIR/male-trimmed-pair1.fastq \$RDIR/male-trimmed-pair2.fastq
+ 
+## Create index for the mapped bam file; this will make it easier to browse the mapped bam file in IGV browser
+samtools index \$STR/male_1p/male.1p.Aligned.sortedByCoord.out.bam
+
+## compress skwer-processed reads to save space.
+gzip --best \$RDIR/*
+
+## compress files that are needed for downstream analysis
+find \$STR -type f \( -name "*.out" -o -name "*.tab" -o -name "*.sjdb" -o -name "*.results" \) | xargs gzip -9
+
+## Cleanup and Copy back all important files
+if [ ! -d \$OWD/reads ];
+then 
+mkdir -p \$OWD/{reads,STAResults}
+fi
+
+## Copy back important files
+cp -a \$STR/male_1p \$OWD/STAResults/
+cp -a \$RDIR/* \$OWD/reads/
+
+## Remove scratch directory
+rm -rf \$SCR
+exit 0
+EOF
+```
+
+### Start mapping
+```bash
+bash STARmale_scr
+```
+
+### Move to another idle wheat terminal where "singlecell" environment is already activated and start mapping the reads froms female sample
+```bash
+cat > STARfemale_scr << EOF
+#!/bin/bash
+
+## Set reference genome, genome indexes, junction and annotation database directory paths
+REF=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_YMSK
+GFA=\$REF/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
+ANN=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
+FTQ=\$HOME/BIOC281/Classes/2/fastq/female
+
+## Set parameters
+CmmnPrms="--runThreadN 4 --outSJfilterReads Unique --outFilterType BySJout --outSAMunmapped Within \\
+--outSAMattributes NH HI AS nM NM MD jM jI XS MC ch --outFilterMultimapNmax 20 --outFilterMismatchNmax 999 --alignIntronMin 20 \\
+--outFilterMismatchNoverReadLmax 0.04 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \\
+--alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --sjdbScore 1"
+AdtlPrms="--outSAMtype BAM SortedByCoordinate --outBAMcompression 10 --limitBAMsortRAM 57000000000 \\
+--quantMode TranscriptomeSAM GeneCounts --quantTranscriptomeBAMcompression 10 --outSAMstrandField intronMotif"
+
+## Define directory structure for run
+export OWD=\`pwd\`
+export SCR=\$HOME/scratch_female
+export STR=\$SCR/STARun
+export RDIR=\$SCR/reads
+
+## create scratch run directory and read directory
+mkdir -p \$RDIR
+
+## concatenate read files if they are split into multiple files
+cat \$FTQ/*R1*.fastq.gz > \$SCR/female_R1.fastq.gz
+cat \$FTQ/*R2*.fastq.gz > \$SCR/female_R2.fastq.gz
+
+## decompress read files
+gzip -d \$SCR/*.fastq.gz
+
+## Start skewer to trim reads for quality of base calls and remove adapter sequences at 3' ends
+cd \$RDIR
+
+### If Truseq Illumina adapters (obsolete) were used to prepare the library then use the following adapter sequences
+#skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
+#-y AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \\
+#-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet \$SCR/female_R1.fastq \$SCR/female_R2.fastq
+
+## If Nextera Illumina primers were used to prepare the library then use the following adapter sequences
+skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
+-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
+-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet \$SCR/female_R1.fastq \$SCR/female_R2.fastq
+
+### If custom CZBiohub IDT primers (Index=12bp) were used to prepare the library then use the following adapter sequences
+#skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
+#-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
+#-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet \$SCR/female_R1.fastq \$SCR/female_R2.fastq
+
+## Start STAR alignment
+mkdir -p \$STR/female_1p
+cd \$STR
+
+STAR \$CmmnPrms \$AdtlPrms --genomeDir \$REF --outFileNamePrefix \$STR/female_1p/female.1p. \\
+--readFilesIn \$RDIR/female-trimmed-pair1.fastq \$RDIR/female-trimmed-pair2.fastq
+
+## Create index for the mapped bam file; this will make it easier to browse the mapped bam file in IGV browser
+samtools index \$STR/female_1p/female.1p.Aligned.sortedByCoord.out.bam
+
+## compress skwer-processed reads to save space.
+gzip --best \$RDIR/*
+
+## compress files that are needed for downstream analysis
+find \$STR -type f \( -name "*.out" -o -name "*.tab" -o -name "*.sjdb" -o -name "*.results" \) | xargs gzip -9
+
+## Cleanup and Copy back all important files
+if [ ! -d \$OWD/reads ];
+then
+mkdir -p \$OWD/{reads,STAResults}
+fi
+
+## Copy back important files
+cp -a \$STR/female_1p \$OWD/STAResults/
+cp -a \$RDIR/* \$OWD/reads/
+
+## Remove scratch directory
+rm -rf \$SCR
+exit 0
+EOF
+
+bash STARfemale_scr
+```
+
+### Let's now use the reads thatw ere cleaned up using skewer for one of the sample and do trancriptome based mapping using kallisto
+```bash
+cd ~/BIOC281/Classes/2/
+mkdir kallistoResults && cd kallistoResults
+
+ln -sv ~/BIOC281/Classes/2/reads/male*fastq.gz ./
+ln -sv  ~/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/kallistoIndex/hg38.refSeq.transcriptome.ERCC.idx
+
+kallisto quant -t 4 -i hg38.refSeq.transcriptome.ERCC.idx -o output -b 100 <(zcat male-trimmed-pair1.fastq.gz) <(zcat male-trimmed-pair2.fastq.gz)
+```
