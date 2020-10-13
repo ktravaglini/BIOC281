@@ -7,7 +7,7 @@ ssh <SUNetID>@rice.stanford.edu
 
 ### Request resources needed for alignments
 ```bash
-salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-48:00:00 --qos=interactive srun --pty bash -i -l
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-24:00:00 --qos=interactive srun --pty bash -i -l
 ```
 
 ### Activate the single cell environment
@@ -22,7 +22,7 @@ jupyter lab --no-browser
 
 ### Initiate port forwarding through ssh tunnel on your system/laptop
 ```bash
-ssh -N -f -L 9999:localhost:8888 <SUNetID>@wheat<XX>.stanford.edu
+ssh -N -f -L <PORT>:localhost:<PORT> <SUNetID>@wheat<XX>.stanford.edu
 ```
 
 ### Login to jupyter in your browser, open a Terminal window, and activate the single cell environment

@@ -64,15 +64,31 @@ conda activate singlecell
 ```
 ## Moving forward, when using pip, install all python packages within "singlecell" environment after activating it and not in the "base" environment
 
-### Install scanpy, jupyter, MulticoreTSNE, bbknn, velocyto, samtools, and kallisto with conda and pip
+### Install scanpy, jupyter, MulticoreTSNE, BBKNN, velocyto, samtools, kallisto, scVI, and MAGIC with conda and pip
 ```bash
 conda install seaborn scikit-learn statsmodels numba pytables libcurl
+
 conda install -c conda-forge python-igraph leidenalg jupyterlab nodejs
+
 pip install scanpy
+
 pip install MulticoreTSNE bbknn
+
 pip install velocyto
 
+pip install seaborn==0.10
+
 conda install -c bioconda samtools kallisto
+
+conda install scvi -c bioconda -c conda-forge
+
+git clone git://github.com/atarashansky/self-assembling-manifold.git
+pip install ~/self-assembling-manifold/.
+
+git clone git://github.com/KrishnaswamyLab/MAGIC.git
+pip install ~/MAGIC/python/.
+
+
 ```
 
 ### Fetch some binaries and scripts from STAR, skewer, bedtools, and tophat packages and install them
@@ -144,7 +160,7 @@ echo 'export PATH="$HOME/R/bin:$PATH"' >> ~/.bashrc
 echo 'module load gcc/9.3.0' >> ~/.bashrc
 echo -e "AR=gcc-ar\nNM=gcc-nm\nRANLIB=gcc-ranlib" > ~/.Renviron
 
-echo -e "options(Ncpus = 4)\nmessage(\"\\\033[38;05;208mHi <Rahul>, welcome to R...\\\033[00m\")\nSys.setenv(RETICULATE_PYTHON = \"/home/<SUNetID>/miniconda3/envs/singlecell/bin/python\")" >> ~/.Rprofile
+echo -e "options(Ncpus = 4)\nmessage(\"\\\033[38;05;208mHi <SUNetID>, welcome to R...\\\033[00m\")\nSys.setenv(RETICULATE_PYTHON = \"/home/<SUNetID>/miniconda3/envs/singlecell/bin/python\")" >> ~/.Rprofile
 
 source ~/.bashrc
 ```
@@ -199,7 +215,7 @@ git clone https://github.com/ktravaglini/BIOC281.git
 
 ### On Mac or PC local shell run the following command
 ```bash
-ssh -N -f -L 9999:localhost:8888 <SUNetID>@rice<XX>.stanford.edu
+ssh -N -f -L <PORT>:localhost:<PORT> <SUNetID>@rice<XX>.stanford.edu
 ```
 
 ### Now move back to the terminal connected to rice and Launch Jupyter
