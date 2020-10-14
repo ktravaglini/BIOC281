@@ -1,41 +1,43 @@
 # Tutorial 1
+Today we will install the software we will be using throughout the course on Stanford FarmShare as well as completing a small data analysis exercise to familiarize you with jupyter. To begin, we need to connect to FarmShare using ssh (**s**ecure **sh**ell).
 
 ## On Windows 10 launch PowerShell or install SecureCRT
 
-#### Right click on the Windows "Start" icon on lower left and click "Windows PowerShell"
+Right click on the Windows "Start" icon on lower left and click "Windows PowerShell"
 
-#### Alternatively, install Stanford provided terminal app SecureCRT "https://uit.stanford.edu/software/scrt_sfx" (recommended)
+Alternatively, install Stanford provided terminal app SecureCRT "https://uit.stanford.edu/software/scrt_sfx" (recommended)
 
-#### After installing SecureCRT click file-->Quick Connect. In the "Hostname" field type "rice.stanford.edu" without the quotes. Make sure that "Save session" and "Open in tab" options are checked. Click "Connect" followed by "OK". When promted, type your SUNetID as Username and SUNetpassword as password. You may want to save your username and password so its easier to connect in future. Next time simmply click on "Session Manager" and double click on the saved rice.stanford.edu session to connect.
+After installing SecureCRT click file-->Quick Connect. In the "Hostname" field type "rice.stanford.edu" without the quotes. Make sure that "Save session" and "Open in tab" options are checked. Click "Connect" followed by "OK". When promted, type your SUNetID as Username and SUNetpassword as password. You may want to save your username and password so its easier to connect in future. Next time simmply click on "Session Manager" and double click on the saved rice.stanford.edu session to connect.
 
 ## On Mac launch Terminal app
 
-#### Press command+space keys together to access search. Type "Terminal" in search field and click Terminal.app to launch terminal
+Press command+space keys together to access search. Type "Terminal" in search field and click Terminal.app to launch terminal
 
-#### Once Terminal is running connect to FarmShare by typing the following command. Replace SUNetID with your SUNetID without the "<>" characters. Follow similar scheme for the rest of the tutorial: "<>" indicates a text string specicific to you that needs to be replaced.
+Once Terminal is running connect to FarmShare by typing the following command. Replace SUNetID with your SUNetID without the "<>" characters. Follow similar scheme for the rest of the tutorial: "<>" indicates a text string specicific to you that needs to be replaced.
+
 ```bash
 ssh <SUNetID>@rice.stanford.edu
 ```
 
-### Do you have conda installed?
+## Do you have conda installed?
 
 ```bash
 which conda
 ```
 
-#### If not, install it (follow prompts)
+### If not, install it (follow prompts)
 
 ```bash
 wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && bash Miniconda3-latest-Linux-x86_64.sh
 rm -fr Miniconda3-latest-Linux-x86_64.sh
 ```
 
-#### Activate conda
+### Activate conda
 ```bash
 source ~/.bashrc
 ```
 
-#### Check the installation (should point to Miniconda)
+### Check the installation (should point to Miniconda)
 
 ```bash
 which conda
@@ -43,30 +45,33 @@ which python
 which pip
 ```
 
-#### Check python version (should be >3.8)
+### Check python version (should be >3.8)
 ```bash
 python --version
 ```
 
-### Update conda
+## Update conda
 ```bash
 conda update -n base -c defaults conda
 ```
 
-### Create "singlecell" environment
+## Create "singlecell" environment
 ```bash
 conda create --name singlecell python=3.8.5
 ```
 
-### Activate the environment
+## Activate the environment
 ```bash
 conda activate singlecell
 ```
-## Moving forward, when using pip, install all python packages within "singlecell" environment after activating it and not in the "base" environment
 
-### Install scanpy, jupyter, MulticoreTSNE, BBKNN, velocyto, samtools, kallisto, scVI, and MAGIC with conda and pip
+## Install python based packages
+Moving forward, when using pip, install all python packages within "singlecell" environment after activating it and not in the "base" environment
+
+### Install scanpy, jupyter, MulticoreTSNE, BBKNN, velocyto, samtools, kallisto, and synapse with conda and pip
+
 ```bash
-conda install seaborn scikit-learn statsmodels numba pytables libcurl
+conda install seaborn scikit-learn statsmodels numba pytables libcurl mygene adjustText
 
 conda install -c conda-forge python-igraph leidenalg jupyterlab nodejs
 
@@ -78,17 +83,11 @@ pip install velocyto
 
 pip install seaborn==0.10
 
+pip install synapseclient[pandas,pysftp]
+
 conda install -c bioconda samtools kallisto
 
 conda install scvi -c bioconda -c conda-forge
-
-git clone git://github.com/atarashansky/self-assembling-manifold.git
-pip install ~/self-assembling-manifold/.
-
-git clone git://github.com/KrishnaswamyLab/MAGIC.git
-pip install ~/MAGIC/python/.
-
-
 ```
 
 ### Fetch some binaries and scripts from STAR, skewer, bedtools, and tophat packages and install them
@@ -115,7 +114,6 @@ rm -fr ~/*tophat*
 wget --quiet http://hsc.stanford.edu/resources/cellranger-4.0.0.tar.gz
 tar xf ~/cellranger-4.0.0.tar.gz
 echo 'export PATH="$HOME/cellranger-4.0.0:$PATH"' >> ~/.bashrc
-source ~/.bashrc
 ```
 
 ### Configure environment To access MariaDB server at UCSC and use their tools and utilities. Details: "https://genome.ucsc.edu/goldenPath/help/mysql.html"
@@ -133,19 +131,27 @@ chmod +x ~/miniconda3/envs/singlecell/bin/twoBitToFa \
 ~/miniconda3/envs/singlecell/bin/genePredToGtf
 ```
 
-### Install SICIALIAN from GitHub source 
+### Install SICIALIAN, MAGIC, and scVI from GitHub source 
 ```bash
 git clone https://github.com/salzmanlab/SICILIAN.git
 cd SICILIAN && pip install -r requirements.txt && cd
+
+git clone git://github.com/atarashansky/self-assembling-manifold.git
+pip install ~/self-assembling-manifold/.
+
+git clone git://github.com/KrishnaswamyLab/MAGIC.git
+pip install ~/MAGIC/python/.
 ```
 
-# Install R 4.0.2
-## Moving forward always install R-packages using BiocManager in "base" environment after decativating "singlecell"
+## Install R packages
+
+### Deacticate the conda environment
 ```bash
 conda deactivate
 ```
 
-### Notice your command prompt: it should indicate you have moved from "singlecell" to "base" conda environment
+### Install R 4.0.2
+**Note:** You need to replace <SUNetID> in the commands below.
 ```bash
 module load gcc/9.3.0
 
@@ -201,29 +207,21 @@ q()
 ```
 
 ### Clone the class GitHub repository
-git clone https://github.com/ktravaglini/BIOC281.git
-
-# Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab running on rice
-
-## On a Windows 10 PC
-#### Right click on the Windows "Start" icon on lower left and click "Windows PowerShell" to lauch powershell
-
-#### Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell"
-
-## On a Mac
-#### Launch Terminal app as above 
-
-### On Mac or PC local shell run the following command
 ```bash
-ssh -N -f -L <PORT>:localhost:<PORT> <SUNetID>@rice<XX>.stanford.edu
+git clone https://github.com/ktravaglini/BIOC281.git
 ```
 
-### Now move back to the terminal connected to rice and Launch Jupyter
-#### You must be in "singlecell" environment before you run the command below
+### Activate the singlecell conda environment
+```bash
+conda activate singlecell
+```
+
+### Run jupyter
 ```bash
 jupyter lab --no-browser
 ```
-#### Output should look like:
+
+### Output should look like:
 
 ```bash
 [I 01:28:43.597 LabApp] JupyterLab extension loaded from /home/sinhar/miniconda3/envs/singlecell/lib/python3.8/site-packages/jupyterlab
@@ -242,18 +240,27 @@ jupyter lab --no-browser
      or http://127.0.0.1:8888/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a
 ```
 
-### Now Lauch browser on your system/laptop and login to jupyter running remotely on rice
-#### copy the line with webaddress "http://localhost:8888/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a" from the terminal
-#### Paste it into your browser and replace port# 8888 with 9999 so the address now looks like:
+### Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab running on rice
+
+**On a Windows 10 PC:** Right click on the Windows "Start" icon on lower left and click "Windows PowerShell" to lauch powershell
+Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell"
+
+**On a Mac:** Launch Terminal app as above 
+
+On Mac or PC local shell run the following command
 ```bash
-http://localhost:9999/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a
+ssh -N -f -L <PORT>:localhost:<PORT> <SUNetID>@rice<XX>.stanford.edu
 ```
 
-### You can now access terminal in the browser window connected to Jupyter running on rice. Now we can use this terminal to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes1/Tutorial.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
+### Now Lauch browser on your system/laptop and login to jupyter running remotely on rice
+Copy the line with web address "http://localhost:8888/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a" from the terminal and paste it into your browser
 
-## Make sure that the terminal in Jupyter in the browser has started with the "base" environment
+### You can now access terminal in the browser window connected to Jupyter running on rice. Now we can use this terminal to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes/1/Tutorial 1.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
 
-### Start R
+When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
+
+
+### Start R in jupyter (File > New... > Terminal)
 ```bash
 R
 ```
@@ -261,7 +268,7 @@ R
 ### Install Seurat and Monocle3 (in R)
 
 ```R
-BiocManager::install("Seurat")
+BiocManager::install("Seurat", "useful", "here", "RColorBrewer", "plotly", "genieclust")
 BiocManager::install("cole-trapnell-lab/monocle3")
 ```
 
