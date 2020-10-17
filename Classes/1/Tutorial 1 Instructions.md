@@ -19,6 +19,12 @@ Once Terminal is running connect to FarmShare by typing the following command. R
 ssh <SUNetID>@rice.stanford.edu
 ```
 
+## Switch to a persistent session
+The current command line we opened on rice will exit when we disconnect from the server. Programs like tmux and screen allow for command lines to run on a remote server, even when your connection terminates. After running the command below, a green bar should appear at the bottom of your screen
+```bash
+tmux
+```
+
 ## Do you have conda installed?
 
 ```bash
@@ -69,6 +75,8 @@ conda activate singlecell
 Moving forward, when using pip, install all python packages within "singlecell" environment after activating it and not in the "base" environment
 
 ### Install scanpy, jupyter, MulticoreTSNE, BBKNN, velocyto, samtools, kallisto, and synapse with conda and pip
+Synapse is one of many resources where you can deposit processed single cell RNAseq data (others include the NIH's Gene Expression Omnibus or EMBL-EBI's BioStudies)
+While these packages are installing, go to https://www.synapse.org and create a synapse account
 
 ```bash
 conda install seaborn scikit-learn statsmodels numba pytables libcurl mygene adjustText
@@ -247,18 +255,17 @@ Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell
 
 **On a Mac:** Launch Terminal app as above 
 
-On Mac or PC local shell run the following command
+On Mac or PC local shell run the following command. The <PORT> comes from the jupyter lab output (default is 8888, but changes if that's in use) and the specific rice system comes from your terminal window. For example, if I see "(base) ktrav@rice11:~$" I know I am on rice11.stanford.edu.
 ```bash
-ssh -N -f -L <PORT>:localhost:<PORT> <SUNetID>@rice<XX>.stanford.edu
+ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@rice<XX>.stanford.edu
 ```
 
 ### Now Lauch browser on your system/laptop and login to jupyter running remotely on rice
 Copy the line with web address "http://localhost:8888/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a" from the terminal and paste it into your browser
 
-### You can now access terminal in the browser window connected to Jupyter running on rice. Now we can use this terminal to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes/1/Tutorial 1.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
+You can now access terminal in the browser window connected to Jupyter running on rice, which we can use to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes/1/Tutorial 1.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
 
 When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
-
 
 ### Start R in jupyter (File > New... > Terminal)
 ```bash
@@ -291,3 +298,11 @@ R CND INSTALL ~/CytoTRACE_0.3.3.tar.gz
 ```bash
 rm -fr ~/CytoTRACE_0.3.3.tar.gz
 ```
+
+## Request resources for the next class
+After saving Tutorial 1.ipynb and installing all the R packages, return to the original terminal window where you launched jupyter. Quit jupyter by pressing command+c twice (you should still see the green tmux bar). Now, request resources for the next class with salloc.
+```bash
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/21/20" --qos=interactive srun --pty bash -i -l
+```
+    
+You can now detach from tmux with control+b and then press "d". If the green bar on the bottom disappears, you can safely close your terminal window. See you next class!

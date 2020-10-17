@@ -8,10 +8,14 @@ To begin the tutorials, we need to request dedicated resources on Stanford FarmS
 ssh <SUNetID>@rice.stanford.edu
 ```
 
-## Request resources needed for alignments
+### Switch to the persistent terminal window
+The resources we requested on Wednesday should be ready to go. You can tell if your terminal has switched from something like "(base) <SUNetID>@**rice**<XX>:~$" to "(base) <SUNetID>@**wheat**<XX>:~$"
+
+You should also see the green tmux bar along the bottom of your terminal.
 ```bash
-salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=interactive srun --pty bash -i -l
+tmux attach
 ```
+If the resources have been allocated, then proceed. If not, please let us know!
 
 ## Activate the single cell environment
 ```bash
@@ -67,3 +71,19 @@ When finished, please save the outputs of Tutorial 3 - Seurat.ipynb (File > Expo
 ## Open and complete BIOC281/Classes/3/Tutorial 3 - scanpy.ipynb
 When finished, please save the outputs of Tutorial 3 - scanpy.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
+## Request resources for the next class
+After saving Tutorial 3 - Seurat.ipynb and Tutorial 3 - scanpy.ipynb, return to the original terminal window where you launched jupyter. Quit jupyter by pressing command+c twice.
+
+### Leave the current wheat allocation
+After running the command below, your terminal should switch back to rice from wheat.
+```bash
+exit
+```
+
+### Run salloc
+You should see the green tmux bar
+```bash
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/26/20" --qos=interactive srun --pty bash -i -l
+```
+    
+You can now detach from tmux with control+b and then press "d". If the green bar on the bottom disappears, you can safely close your terminal window. See you next class!

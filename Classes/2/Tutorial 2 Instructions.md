@@ -6,10 +6,14 @@ Today we will download a genome fasta and annotation and then build indexes with
 ssh <SUNetID>@rice.stanford.edu
 ```
 
-### Request resources needed for alignments
+### Switch to the persistent terminal window
+The resources we requested on Monday should be ready to go. You can tell if your terminal has switched from something like "(base) <SUNetID>@**rice**<XX>:~$" to "(base) <SUNetID>@**wheat**<XX>:~$"
+
+You should also see the green tmux bar along the bottom of your terminal.
 ```bash
-salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=interactive srun --pty bash -i -l
+tmux attach
 ```
+If the resources have been allocated, then proceed. If not, please let us know!
 
 ### Activate the single cell environment
 ```bash
@@ -30,7 +34,7 @@ Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell
 
 On Mac or PC local shell run the following command
 ```bash
-ssh -N -f -L <PORT>:localhost:<PORT> <SUNetID>@rice<XX>.stanford.edu
+ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 ```
 
 ### Login to jupyter in your browser, open a Terminal window (File > New... > Terminal), and activate the single cell environment
@@ -488,4 +492,19 @@ gzip -d ~/BIOC281/Classes/2/STAResults/male_1p/male.1p.ReadsPerGene.out.tab.gz
 ## We're now going to read in and look at how the different aligners compare, please open BIOC281/Classes/2/Tutorial 2.ipynb
 When finished, please save the outputs of Tutorial 2.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
+## Request resources for the next class
+After saving Tutorial 2.ipynb, return to the original terminal window where you launched jupyter. Quit jupyter by pressing command+c twice.
 
+### Leave the current wheat allocation
+After running the command below, your terminal should switch back to rice from wheat.
+```bash
+exit
+```
+
+### Run salloc
+You should see the green tmux bar
+```bash
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/23/20" --qos=interactive srun --pty bash -i -l
+```
+    
+You can now detach from tmux with control+b and then press "d". If the green bar on the bottom disappears, you can safely close your terminal window. See you next class!
