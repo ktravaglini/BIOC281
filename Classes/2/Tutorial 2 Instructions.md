@@ -20,8 +20,7 @@ Login to wheat node assigned to you
 ```bash
 ssh wheat<xx>
 ```
-You can tell if your terminal has switched from something like "(base) \<SUNetID\>@**rice**\<XX\>:~$" to "(base) \<SUNetID\>@**wheat**\<XX\>:~$"
-
+You can tell if your terminal has switched from something like "(base) \<SUNetID\>\@**rice**\<XX\>:\~\$" to "(base) \<SUNetID\>\@**wheat**\<XX\>:\~\$"
 Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" session you just started is specific to you and is running only on the wheat\<xx\> (or rice\<xx\> node as we did in the first tutorial) where you started it
 ```bash
 tmux
