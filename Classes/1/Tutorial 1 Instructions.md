@@ -7,13 +7,13 @@ Right click on the Windows "Start" icon on lower left and click "Windows PowerSh
 
 Alternatively, install Stanford provided terminal app SecureCRT "https://uit.stanford.edu/software/scrt_sfx" (recommended)
 
-After installing SecureCRT click file-->Quick Connect. In the "Hostname" field type "rice.stanford.edu" without the quotes. Make sure that "Save session" and "Open in tab" options are checked. Click "Connect" followed by "OK". When promted, type your SUNetID as Username and SUNetpassword as password. You may want to save your username and password so its easier to connect in future. Next time simmply click on "Session Manager" and double click on the saved rice.stanford.edu session to connect.
+After installing SecureCRT click file-->Quick Connect. In the "Hostname" field type "rice.stanford.edu" without the quotes. Make sure that "Save session" and "Open in tab" options are checked. Click "Connect" followed by "OK". When promted, type your SUNetID as Username and SUNetpassword as password. You may want to save your username and password so its easier to connect in future. Next time simply click on "Session Manager" and double click on the saved rice.stanford.edu session to connect.
 
 ## On Mac launch Terminal app
 
 Press command+space keys together to access search. Type "Terminal" in search field and click Terminal.app to launch terminal
 
-Once Terminal is running connect to FarmShare by typing the following command. Replace SUNetID with your SUNetID without the "<>" characters. Follow similar scheme for the rest of the tutorial: "<>" indicates a text string specicific to you that needs to be replaced.
+Once Terminal is running connect to FarmShare by typing the following command. Replace SUNetID with your SUNetID without the "<>" characters. Follow similar scheme for the rest of the tutorial: "<>" indicates a text string specific to you that needs to be replaced.
 
 ```bash
 ssh <SUNetID>@rice.stanford.edu
@@ -219,11 +219,6 @@ q()
 git clone https://github.com/ktravaglini/BIOC281.git
 ```
 
-### Activate the singlecell conda environment
-```bash
-conda activate singlecell
-```
-
 ### Run jupyter
 ```bash
 jupyter lab --no-browser
@@ -250,17 +245,17 @@ jupyter lab --no-browser
 
 ### Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab running on rice
 
-**On a Windows 10 PC:** Right click on the Windows "Start" icon on lower left and click "Windows PowerShell" to lauch powershell
+**On a Windows 10 PC:** Right click on the Windows "Start" icon on lower left and click "Windows PowerShell" to lauch powershell.
 Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell"
 
 **On a Mac:** Launch Terminal app as above 
 
-On Mac or PC local shell run the following command. The <PORT> comes from the jupyter lab output (default is 8888, but changes if that's in use) and the specific rice system comes from your terminal window. For example, if I see "(base) ktrav@rice11:~$" I know I am on rice11.stanford.edu.
+On Mac or PC local shell, run the following command. The "<Port>" comes from the jupyter lab output (default is 8888, but changes if that's in use) and the specific rice system comes from your terminal window. For example, if I see "(base) ktrav@rice11:~$" I know I am on rice11.stanford.edu.
 ```bash
 ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@rice<XX>.stanford.edu
 ```
 
-### Now Lauch browser on your system/laptop and login to jupyter running remotely on rice
+### Now Launch browser on your system/laptop and login to jupyter running remotely on rice
 Copy the line with web address "http://localhost:8888/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a" from the terminal and paste it into your browser
 
 You can now access terminal in the browser window connected to Jupyter running on rice, which we can use to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes/1/Tutorial 1.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
@@ -268,6 +263,7 @@ You can now access terminal in the browser window connected to Jupyter running o
 When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
 ### Start R in jupyter (File > New... > Terminal)
+NOte and confirm thhat terminal launches automatically in the "base" conda environment ["(base) <SUNetID>@rice11:~$"]
 ```bash
 R
 ```
@@ -291,7 +287,7 @@ wget --quiet https://cytotrace.stanford.edu/CytoTRACE_0.3.3.tar.gz
 
 ### Install CytoTRACE
 ```R
-R CND INSTALL ~/CytoTRACE_0.3.3.tar.gz    
+R CMD INSTALL ~/CytoTRACE_0.3.3.tar.gz    
 ```
 
 ### Cleanup CytoTRACE source
