@@ -7,7 +7,7 @@ ssh <SUNetID>@rice.stanford.edu
 ```
 
 ### Switch to the persistent terminal window
-The resources we requested on Monday should be ready to go. Tho check specifics issue "squeue" command:
+The resources we requested on Monday should be ready to go. To check specifics issue "squeue" command:
 ```bash
 squeue -u <SUNetID>
 ```
@@ -21,6 +21,7 @@ Login to wheat node assigned to you
 ssh wheat<xx>
 ```
 You can tell if your terminal has switched from something like "(base) \<SUNetID\>\@**rice**\<XX\>:\~\$" to "(base) \<SUNetID\>\@**wheat**\<XX\>:\~\$"
+
 Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" session you just started is specific to you and is running only on the wheat\<xx\> (or rice\<xx\> node as we did in the first tutorial) where you started it
 ```bash
 tmux
@@ -30,11 +31,12 @@ As an excercise hit "ctrl+b" keys together followed by "d" to detach from the tm
 ```bash
 tmux ls
 ```
-You shouls have only one seesion running with session ID "0". You can reattach to the same "tmux" session again by issuing:
+You should have only one seesion running with session ID "0". You can reattach to the same "tmux" session again by issuing:
 ```bash
 ## In case only one "tmux" session running
 tmux attach
-## If multiple "tmux" sessions are running (every time you type "tmux" and run it on wheat<xx>, it starts a new session) you need to specify session ID=0, 1, 2... and so on
+## If multiple "tmux" sessions are running you need to specify session ID=0, 1, 2... and so on
+## every time you type "tmux" and run it on wheat<xx> (or rice<xx>), it starts a new session
 tmux attach -t -d <sessionID>
 ```
 ### After attaching to "tmux" session (session=0), activate the single cell environment
@@ -47,7 +49,8 @@ conda activate singlecell
 jupyter lab --no-browser
 ```
 
-### Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab now running on wheat\<xx\> (not rice\<xx\> like in the previous tutorial)
+### Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab now running on wheat\<xx\> 
+Recall we ran Jupyter lab session on rice\<xx\> in the previous tutorial
 
 **On a Windows 10 PC:** Right click on the Windows "Start" icon on lower left and click "Windows PowerShell" to lauch powershell
 Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell"
@@ -56,7 +59,7 @@ Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell
 
 On Mac or PC local shell, run the following command
 ```bash
-ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
+ssh -N -f -L 8888:localhost:8888 <SUNetID>@wheat<XX>.stanford.edu
 ```
 
 ### Login to jupyter in your browser, open a Terminal window (File > New... > Terminal), and activate the single cell environment
@@ -306,7 +309,7 @@ kallisto index -i hg38.refSeq.transcriptome.ERCC.idx ./hg38.refGene.ERCC.transcr
 We will be downloading paired end reads from two Hematopoietic Stem Cells (HSCs) captured with SmartSeq2 (one male and one female)
 ```bash
 cd ~/BIOC281/Classes/2/
-wget -r -np -nH --cut-dirs=1 --reject=index* http://hsc.stanford.edu/resources/fastq/
+wget --quiet -r -np -nH --cut-dirs=1 --reject=index* http://hsc.stanford.edu/resources/fastq/
 ```
 
 #### Create STAR mapping script. This script is adapted from ENCODE long-mRNA protocol
@@ -535,3 +538,91 @@ salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin=
 ```
     
 You can now detach from tmux with control+b and then press "d". If the green bar on the bottom disappears, you can safely close your terminal window. See you next class!
+
+## Method to do 2-pass STAR mapping (for practice after class)
+```bash
+ssh <SUNetID>@rice.stanford.edu
+## request resources on wheat
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-6:00:00 --qos=interactive srun --pty bash -i -l
+## start tmux session on wheat
+tmux
+## activate singlecell environment
+conda activate singlecell
+## change to Tutorial 2 directory
+cd ~/BIOC281/Classes/2/
+## create directory for crating new STAR index with newly discovered splice junctions after first-pass mapping
+mkdir STARindex_2p && cd STARindex_2p
+## create softlinks for the SJ.out.tab files from both male and female first-pass mapping
+ln -sv ../STAResults/male_1p/male.1p.SJ.out.tab.gz
+ln -sv ../STAResults/female_1p/female.1p.SJ.out.tab.gz
+## concatenate the two SJ.ot.tab files-- you can explore all files using less
+cat male.1p.SJ.out.tab.gz female.1p.SJ.out.tab.gz > merged.1p.SJ.out.tab.gz
+## decompress the merged SJ.out.tab file
+gzip -d merged.1p.SJ.out.tab.gz
+## remove all lines with "chrM" string-- mitochondrial DNA has no introns
+## check if merged file has chrM entries
+grep chrM merged.1p.SJ.out.tab
+## remove chrM entries
+awk '!/chrM/' merged.1p.SJ.out.tab > merged.1p.SJ.out.nochrM.tab
+## check that chrM entries have been deleted from the new file
+grep chrM merged.1p.SJ.out.nochrM.tab
+## count number of lines in original and the resulting merged file to compare
+wc -l merged.1p.SJ.out.tab
+wc -l merged.1p.SJ.out.nochrM.tab
+
+#### from STAR manual
+## SJ.out.tab contains high confidence collapsed splice junctions in tab-delimited format. Note that
+## STAR defines the junction start/end as intronic bases, while many other software define them as
+## exonic bases. The columns have the following meaning:
+
+## column 1: chromosome
+## column 2: first base of the intron (1-based)
+## column 3: last base of the intron (1-based)
+## column 4: strand (0: undefined, 1: +, 2: -)
+## column 5: intron motif: 0: non-canonical; 1: GT/AG, 2: CT/AC, 3: GC/AG, 4: CT/GC, 5:AT/AC, 6: GT/AT
+## column 6: 0: unannotated, 1: annotated (only if splice junctions database is used)
+## column 7: number of uniquely mapping reads crossing the junction
+## column 8: number of multi-mapping reads crossing the junction
+## column 9: maximum spliced alignment overhang
+
+## extract a list of all newly discovered exons previously not present in the GTF
+## this will include new junctions that are supported by unique and multi-mapping reads
+## "uniq" command below collapses same entries mentioned multiple times
+cat merged.1p.SJ.out.nochrM.tab | awk '($6==0)' | cut -f1-6 | sort | uniq > merged.1p.SJ.out.nochrM.new.tab
+## to get all new junctions that are supported by at least one uniquely mapped read
+cat merged.1p.SJ.out.nochrM.tab | awk '($7 > 1 && $6==0)' | cut -f1-6 | sort | uniq > merged.1p.SJ.out.nochrM.new.uniq.tab
+
+## create an sjdb file that can be used by STAR while generating genome index
+## STAR can collapse duplilicate (and triplicate and so on) entries on the fly while generating genome index.
+## therefore we can safely use the file with no chrM entries to create the sjdb file
+awk 'BEGIN {OFS="\t"; strChar[0]="."; strChar[1]="+"; strChar[2]="-";} {print $1,$2,$3,strChar[$4]}' merged.1p.SJ.out.nochrM.tab > merged.1p.SJ.out.nochrM.tab.sjdb
+
+## now create a new STAR index that includes the newly discovereed junctions
+mkdir PARYMSK_100bp && cd PARYMSK_100bp
+ln -sv ../../RefSeq_Oct2020/GenomeFasta/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
+ln -sv ../../RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
+
+cat > ./createPARYMSKSTARIndex_for_2p_scr << EOF
+#!/bin/bash
+
+STAR --runThreadN 4 --runMode genomeGenerate \
+--genomeDir ./ --genomeFastaFiles ./hg38.RefSeq.mini.PARYhMSK.ERCC.fa \
+--sjdbGTFfile ./hg38.refGene.ERCC.gtf \
+--sjdbFileChrStartEnd ../merged.1p.SJ.out.nochrM.tab.sjdb \
+--sjdbOverhang 100
+EOF
+
+## generate STAR index
+bash createPARYMSKSTARIndex_for_2p_scr
+
+## remap the data from male donor using the provided script
+## explore script using vi/vim or less or your favorite text editor and compare to 1p mapping script
+cd ~/BIOC281/Classes/2/
+bash STARmale_2p_scr
+
+## compare one-pass and two-pass mapping stats
+less ~/BIOC281/Classes/2/STAResults/male_1p/male.1p.Log.final.out.gz
+less ~/BIOC281/Classes/2/STAResults/male_2p/male.2p.Log.final.out.gz
+```
+
+#### Try creating transcriptome, and transcriptome index for only the minigenome (chr 1, 2, X. Y and M) and map reads using this new kallistoindex for partial transcriptome

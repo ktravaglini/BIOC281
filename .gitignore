@@ -1,3 +1,9 @@
 *.ipynb_checkpoints*
 .RData
 .Rhistory
+Classes/2/fastq/*
+Classes/2/kallistoResults/*
+Classes/2/reads/*
+Classes/2/RefSeq_Oct2020/*
+Classes/2/STAResults/*
+Classes/2/STARindex_2p/*
