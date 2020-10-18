@@ -250,7 +250,7 @@ Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell
 
 **On a Mac:** Launch Terminal app as above 
 
-On Mac or PC local shell, run the following command. The "<Port>" comes from the jupyter lab output (default is 8888, but changes if that's in use) and the specific rice system comes from your terminal window. For example, if I see "(base) ktrav@rice11:~$" I know I am on rice11.stanford.edu.
+On Mac or PC local shell, run the following command. The "\<Port\>" comes from the jupyter lab output (default is 8888, but changes if that's in use) and the specific rice system comes from your terminal window. For example, if I see "(base) ktrav@rice11:~$" I know I am on rice11.stanford.edu.
 ```bash
 ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@rice<XX>.stanford.edu
 ```
@@ -263,7 +263,7 @@ You can now access terminal in the browser window connected to Jupyter running o
 When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
 ### Start R in jupyter (File > New... > Terminal)
-NOte and confirm thhat terminal launches automatically in the "base" conda environment ["(base) <SUNetID>@rice11:~$"]
+Note and confirm thhat terminal launches automatically in the "base" conda environment ["(base) \<SUNetID\>@rice11:~$"]
 ```bash
 R
 ```
