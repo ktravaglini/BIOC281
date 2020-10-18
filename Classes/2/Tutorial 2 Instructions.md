@@ -7,15 +7,38 @@ ssh <SUNetID>@rice.stanford.edu
 ```
 
 ### Switch to the persistent terminal window
-The resources we requested on Monday should be ready to go. You can tell if your terminal has switched from something like "(base) <SUNetID>@**rice**<XX>:~$" to "(base) <SUNetID>@**wheat**<XX>:~$"
-
-You should also see the green tmux bar along the bottom of your terminal.
+The resources we requested on Monday should be ready to go. Tho check specifics issue "squeue" command:
 ```bash
-tmux attach
+squeue -u <SUNetID>
 ```
-If the resources have been allocated, then proceed. If not, please let us know!
+You should be able to see that SLURM resource manager has assigned one of the compute nodes "wheat\<xx\>" for your use. If the resources have been allocated, then proceed. If not, please let us know!
+```bash
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2107056    normal     srun   <SUNetID>  R      26:50      1 wheat<xx>
+```
+Login to wheat node assigned to you
+```bash
+ssh wheat<xx>
+```
+You can tell if your terminal has switched from something like "(base) \<SUNetID\>@**rice**\<XX\>:~$" to "(base) \<SUNetID\>@**wheat**\<XX\>:~$"
 
-### Activate the single cell environment
+Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" session you just started is specific to you and is running only on the wheat\<xx\> (or rice\<xx\> node as we did in the first tutorial) where you started it
+```bash
+tmux
+```
+You should again see the green tmux bar along the bottom of your terminal.
+As an excercise hit "ctrl+b" keys together followed by "d" to detach from the tmux session# 0 that you started. The "tmux" session is still running. To check all running tmux sessions issue:
+```bash
+tmux ls
+```
+You shouls have only one seesion running with session ID "0". You can reattach to the same "tmux" session again by issuing:
+```bash
+## In case only one "tmux" session running
+tmux attach
+## If multiple "tmux" sessions are running (every time you type "tmux" and run it on wheat<xx>, it starts a new session) you need to specify session ID=0, 1, 2... and so on
+tmux attach -t -d <sessionID>
+```
+### After attaching to "tmux" session (session=0), activate the single cell environment
 ```bash
 conda activate singlecell
 ```
@@ -25,14 +48,14 @@ conda activate singlecell
 jupyter lab --no-browser
 ```
 
-### Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab running on rice
+### Create an SSH tunnel (on your system/laptop) to connect to Jupyter lab now running on wheat\<xx\> (not rice\<xx\> like in the previous tutorial)
 
 **On a Windows 10 PC:** Right click on the Windows "Start" icon on lower left and click "Windows PowerShell" to lauch powershell
 Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell"
 
 **On a Mac:** Launch Terminal app as above 
 
-On Mac or PC local shell run the following command
+On Mac or PC local shell, run the following command
 ```bash
 ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 ```
@@ -42,7 +65,7 @@ ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 conda activate singlecell
 ```
 
-### Pull the GitHub repository
+### Pull the GitHub repository to update
 ```bash
 cd ~/BIOC281
 git pull
@@ -54,7 +77,7 @@ cd ~/BIOC281/Classes/2
 ```
 
 ## Build a STAR index with and without masking psuedoautosomal regions (PAR)
-The pseudoautosomal regions (PAR1 and PAR2) are short regions of homology between the mammalian X and Y chromosomes. If left unmasked, aligners cannot unamigbuously assign reads to either. When aligning female data the entire Y chromosome is masked, while only the PAR regions, specifically, are masked for male data. See Mangs et al (2007) Current Genomics
+The pseudoautosomal regions (PAR1 and PAR2) are short regions of homology between the mammalian X and Y chromosomes. If left unmasked, aligners cannot unamigbuously assign reads to either. When aligning female data the entire Y chromosome is masked, while only the PAR regions on the Y chromosome are masked for male data. If sex is unknown better to use PAR-masked versions. See Mangs et al (2007) Current Genomics
 
 ### Download NCBI Refseq sequences of human chromosomes 1, 2, X, Y, and M from UCSC
 ```bash
@@ -146,17 +169,17 @@ cat hg38.refGene.gtf ERCC92.gtf > hg38.refGene.ERCC.gtf
 ```
 
 ### You can use less to check and manually read and explore all the fasta and GTF file
-**Note:** less can also read the compresse gzipped (xxx.gz) files as well
+**Note:** less can also read the compresse gzipped (xxx.gz) files
 
 ```bash
 cd ..
 less GenomeFasta/chrM.fa.gz
 less GenomeFasta/ERCC92.fa
-less Annotation/hg38.refGene.ERCC.gtf
+less -S Annotation/hg38.refGene.ERCC.gtf
 ```
 
 ### Build the STAR genome indices
-We need both the genome fasta and the annotation GTF for this purpose. Instead of copying files, we can softlink them to new positions to save time and hard disk space
+We need both the genome fasta and the annotation GTF for this purpose. Instead of copying files, we can create softlinks at the desired locations to save time and hard disk space
 ```bash
 cd ./GenomeIndex/STARIndex/100bp_PRMSK/
 ln -sv ../../../GenomeFasta/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
@@ -241,6 +264,7 @@ cellranger --transcriptome=/home/<SUNetID>/BIOC281/Classes/2/RefSeq_Oct2020/Geno
 
 ### Build a kallisto index
 Either open a new Terminal window while 10x STAR Index is being built, or move back to a previously open terminal that is idle and proceed
+**Note:** if you use a new terminal always activate "singlecell" environment first "conda activate singlecell"  
 
 #### Download the whole genome fasta
 ```bash
@@ -287,7 +311,7 @@ wget -r -np -nH --cut-dirs=1 --reject=index* http://hsc.stanford.edu/resources/f
 ```
 
 #### Create STAR mapping script. This script is adapted from ENCODE long-mRNA protocol
-There is a lot too this script, read through it carefully and try to understand what each section is doing. 
+There is a lot to this script, read through it carefully and try to understand what each section is doing. 
 ```bash
 cat > STARmale_scr << EOF
 #!/bin/bash
@@ -382,6 +406,8 @@ bash STARmale_scr
 
 #### Move to another idle wheat terminal where "singlecell" environment is already activated and start mapping the reads froms female sample
 ```bash
+cd ~/BIOC281/Classes/2/
+
 cat > STARfemale_scr << EOF
 #!/bin/bash
 
@@ -419,6 +445,7 @@ gzip -d \$SCR/*.fastq.gz
 ## Start skewer to trim reads for quality of base calls and remove adapter sequences at 3' ends
 ## While STAR employs soft clipping to remove ends of reads that do not align, best practice is to
 ## NOT leave this to chance and to "hard clip" the sequences before alignmentcd \$RDIR
+cd \$RDIR
 
 ## If Truseq Illumina adapters (obsolete) were used to prepare the library then use the following adapter sequences
 #skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
@@ -465,6 +492,7 @@ cp -a \$RDIR/* \$OWD/reads/
 rm -rf \$SCR
 exit 0
 EOF
+```
 
 #### Start mapping
 ```bash
@@ -472,7 +500,7 @@ bash STARfemale_scr
 ```
 
 #### Let's now use the reads that were cleaned up using skewer for one of the samples and do trancriptome based mapping using kallisto
-Run this in a separate terminal with the single cell environment turned on as soon as you see a reads folder appear in ~/BIOC281/Classes/2/ that contains male-trimmed-pair1.fastq.gz and male-trimmed-pair2.fastq.gz
+Run this in a separate terminal with the "singlecell" environment turned on as soon as you see a reads folder appear in ~/BIOC281/Classes/2/ that contains male-trimmed-pair1.fastq.gz and male-trimmed-pair2.fastq.gz
 ```bash
 cd ~/BIOC281/Classes/2/
 mkdir kallistoResults && cd kallistoResults
