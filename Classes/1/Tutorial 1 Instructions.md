@@ -79,21 +79,17 @@ Synapse is one of many resources where you can deposit processed single cell RNA
 While these packages are installing, go to https://www.synapse.org and create a synapse account
 
 ```bash
-conda install seaborn scikit-learn statsmodels numba pytables libcurl mygene adjustText
+conda install seaborn scikit-learn statsmodels numba pytables libcurl
 
-conda install -c conda-forge python-igraph leidenalg jupyterlab nodejs
+conda install -c conda-forge python-igraph leidenalg jupyterlab nodejs adjustText
 
-pip install scanpy
-
-pip install MulticoreTSNE bbknn
-
-pip install velocyto
+pip install scanpy MulticoreTSNE bbknn velocyto
 
 pip install seaborn==0.10
 
 pip install synapseclient[pandas,pysftp]
 
-conda install -c bioconda samtools kallisto
+conda install -c bioconda samtools kallisto mygene
 
 conda install scvi -c bioconda -c conda-forge
 ```
@@ -263,7 +259,7 @@ You can now access terminal in the browser window connected to Jupyter running o
 When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
 ### Start R in jupyter (File > New... > Terminal)
-Note and confirm thhat terminal launches automatically in the "base" conda environment ["(base) \<SUNetID\>@rice11:~$"]
+Note and confirm that terminal launches automatically in the "base" conda environment ["(base) \<SUNetID\>@rice11:~$"]
 ```bash
 R
 ```
@@ -271,7 +267,7 @@ R
 ### Install Seurat and Monocle3 (in R)
 
 ```R
-BiocManager::install("Seurat", "useful", "here", "RColorBrewer", "plotly", "genieclust")
+BiocManager::install(c("Seurat", "useful", "here", "RColorBrewer", "plotly", "genieclust"))
 BiocManager::install("cole-trapnell-lab/monocle3")
 ```
 
