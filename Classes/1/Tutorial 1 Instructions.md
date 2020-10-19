@@ -292,7 +292,7 @@ rm -fr ~/CytoTRACE_0.3.3.tar.gz
 ```
 
 ## Request resources for the next class
-After saving Tutorial 1.ipynb and installing all the R packages, return to the original terminal window where you launched jupyter. Quit jupyter by pressing command+c twice (you should still see the green tmux bar). Now, request resources for the next class with salloc.
+After saving Tutorial 1.ipynb and installing all the R packages, return to the original terminal window where you launched jupyter. Quit jupyter by pressing "ctrl+c" (or "command+c") twice (you should still see the green tmux bar). Now, request resources for the next class with salloc.
 ```bash
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/21/20" --qos=interactive srun --pty bash -i -l
 ```

@@ -39,6 +39,9 @@ tmux attach
 ## every time you type "tmux" and run it on wheat<xx> (or rice<xx>), it starts a new session
 tmux attach -t -d <sessionID>
 ```
+
+To kill a persistant "tmux" session (you only need one for now), from a running (or attached) "tmux" session press "ctrl+b" followed by x. When asked "Are you sure you want to terminate" press "y" followed by return key.
+
 ### After attaching to "tmux" session (session=0), activate the single cell environment
 ```bash
 conda activate singlecell
@@ -523,7 +526,7 @@ gzip -d ~/BIOC281/Classes/2/STAResults/male_1p/male.1p.ReadsPerGene.out.tab.gz
 When finished, please save the outputs of Tutorial 2.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
 ## Request resources for the next class
-After saving Tutorial 2.ipynb, return to the original terminal window where you launched jupyter. Quit jupyter by pressing command+c twice.
+After saving Tutorial 2.ipynb, return to the original terminal window where you launched jupyter. Quit jupyter by pressing "cntrl+c" (or "command+c") twice.
 
 ### Leave the current wheat allocation
 After running the command below, your terminal should switch back to rice from wheat.
@@ -532,12 +535,14 @@ exit
 ```
 
 ### Run salloc
-You should see the green tmux bar
+Start "tmux" session on rice and then then request resources
 ```bash
+tmux
+## You should see the green tmux bar. Now run salloc requesting resources for the next class
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/23/20" --qos=interactive srun --pty bash -i -l
 ```
     
-You can now detach from tmux with control+b and then press "d". If the green bar on the bottom disappears, you can safely close your terminal window. See you next class!
+You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the rice node# (reice\<xx\>) where your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely close your terminal window. See you next class!
 
 ## Method to do 2-pass STAR mapping (for practice after class)
 ```bash
