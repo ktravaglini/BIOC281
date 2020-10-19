@@ -59,7 +59,7 @@ Alternatively, If you installed SecureCRT then click "File-->Connect Local Shell
 
 On Mac or PC local shell, run the following command
 ```bash
-ssh -N -f -L 8888:localhost:8888 <SUNetID>@wheat<XX>.stanford.edu
+ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 ```
 
 ### Login to jupyter in your browser, open a Terminal window (File > New... > Terminal), and activate the single cell environment
