@@ -52,6 +52,12 @@ ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 conda activate singlecell
 ```
 
+Install a missing dependency, louvain, for today's  scanpy notebook
+Louvain is largely replaced by leiden these days. However, louvain may still be usefull to recreate plots for some of published data for comparison
+```bash
+pip install louvain
+```
+
 ## Pull the GitHub repository
 ```bash
 git pull
