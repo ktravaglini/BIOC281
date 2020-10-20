@@ -90,6 +90,7 @@ pip install synapseclient[pandas,pysftp]
 ```
 
 ## Fetch some binaries and scripts and install in "singlecell" environment
+```bash
 wget --quiet https://github.com/alexdobin/STAR/archive/2.6.1d.tar.gz
 cp ./STAR-2.6.1d/bin/Linux_x86_64/* ./miniconda3/envs/singlecell/bin/
 
@@ -214,7 +215,7 @@ git clone https://github.com/ktravaglini/BIOC281.git
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=interactive srun --pty bash -i -l
 ```
 
-## Once resources have been allocated to you, run jupyter lab -- pick a port anywhere in the range 49152-65335. Example shown below
+Once resources have been allocated to you, run jupyter lab -- pick a port anywhere in the range 49152-65335. Example shown below
 ```bash
 jupyter lab --no-browser --port=60612
 ```
@@ -230,8 +231,9 @@ Copy the line with web address "http://localhost:60612/?token=e968329a256d1264f6
 
 You can now access terminal in the browser window connected to Jupyter running on rice, which we can use to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes/1/Tutorial 1.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
 
+When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas. Aditotors if interested can email us the results.
 ## Start R in jupyter (File > New... > Terminal)
-Note and confirm that terminal launches automatically in the "base" conda environment ["(base) \<SUNetID\>\@rice11\:\~\$"]
+Note and confirm that terminal launches automatically in the "base" conda environment [(base) [sinhar\@sh03\-ln07 login\ ~]\$]
 ```bash
 R
 ```
@@ -254,5 +256,14 @@ wget --quiet https://cytotrace.stanford.edu/CytoTRACE_0.3.3.tar.gz
 R CMD INSTALL ~/CytoTRACE_0.3.3.tar.gz 
 rm -fr ~/CytoTRACE_0.3.3.tar.gz
 ``` 
-
-
+## Relinquish control node as we are done with computing
+```bash
+exit
+```
+you should be back to login node
+## Request resources for the next class
+```bash
+tmux
+## you should see green bar
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/21/20" --qos=interactive srun --pty bash -i -l
+## now detach tmux by pressing "ctrl+b" followed by "d" key. Note the login node you are before logging out in case we need to get back to the tmux session
