@@ -212,7 +212,7 @@ git clone https://github.com/ktravaglini/BIOC281.git
 ```
 ## Request resources
 ```bash
-salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=interactive srun --pty bash -i -l
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=normal srun --pty bash -i -l
 ```
 
 Once resources have been allocated to you, run jupyter lab -- pick a port anywhere in the range 49152-65335. Example shown below
