@@ -184,7 +184,7 @@ to install packages into? (yes/No/cancel) yes
 Secure CRAN mirrors 
 ```
 
-#### now install all other current and future packages usin BiocManager
+#### now install all other current and future packages using BiocManager
 ```bash
 BiocManager::install("devtools")
 BiocManager::install("remotes")
@@ -217,17 +217,20 @@ salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=no
 
 Once resources have been allocated to you, run jupyter lab -- pick a port anywhere in the range 49152-65335. Example shown below
 ```bash
-jupyter lab --no-browser --port=60612
+jupyter lab --no-browser --port=<Port#>
 ```
 
 ## Now on you Mac or PC local shell run the following command.
 Note that you need to input the specicific compute node name that was allocated to you.
 ```bash
-ssh -L 60606:localhost:60606 sherlock ssh -L 60606:localhost:60606 -N sh-xxx-xx
+ssh -L <Port#>:localhost:<Port> sherlock ssh -L <Port>:localhost:<Port> -N sh-xxx-xx
 ```
+
+At this you find that the port you have chosen is not available--probably used by someone else. If so, terminate jupyter lab and run it again with a different port.. the try tunnelling again with that port.
+
 # IMPORTANT: visit https://vsoch.github.io/lessons/sherlock-jupyter/ and follow instructions to fully secure your broadcasted notebook
 For now Launch browser on your system/laptop and login to jupyter running remotely on Sherlock -- we will be running these notebooks for only a few hours
-Copy the line with web address "http://localhost:60612/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a" from the terminal and paste it into your browser
+Copy the line with web address "http://localhost:<Port>/?token=e968329a256d1264f643d2bf3fa72fc75292446d9d337b3a" from the terminal and paste it into your browser
 
 You can now access terminal in the browser window connected to Jupyter running on rice, which we can use to start installing R packages that we need. While you are working through the R installs (some of them can take a while), please open BIOC281/Classes/1/Tutorial 1.ipynb through jupyter connected through your browser and begin working through the exercise. Periodically, go back check the terminal to see if the package installations have completed.
 
