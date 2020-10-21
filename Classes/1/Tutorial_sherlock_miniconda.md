@@ -223,10 +223,10 @@ jupyter lab --no-browser --port=<Port#>
 ## Now on you Mac or PC local shell run the following command.
 Note that you need to input the specicific compute node name that was allocated to you.
 ```bash
-ssh -L <Port#>:localhost:<Port> sherlock ssh -L <Port>:localhost:<Port> -N sh-xxx-xx
+ssh -L <Port#>:localhost:<Port#> sherlock ssh -L <Port#>:localhost:<Port#> -N sh-xxx-xx
 ```
 
-At this you find that the port you have chosen is not available--probably used by someone else. If so, terminate jupyter lab and run it again with a different port.. the try tunnelling again with that port.
+At this you find that the port you have chosen is not available--probably used by someone else. If so, terminate jupyter lab and run it again with a different port#. then try tunnelling again with that new port#.
 
 # IMPORTANT: visit https://vsoch.github.io/lessons/sherlock-jupyter/ and follow instructions to fully secure your broadcasted notebook
 For now Launch browser on your system/laptop and login to jupyter running remotely on Sherlock -- we will be running these notebooks for only a few hours
