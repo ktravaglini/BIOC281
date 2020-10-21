@@ -336,7 +336,7 @@ rm -fr ./CytoTRACE_0.3.3.tar.gz
     
 If you have finished the first exercise, saved the output and uploaded it to canvas you can now return to the terminal window you used to launch jupyter. Kill the program by pressing "ctrl+c" twice
 
-#### Relinquish control node as we are done with computing
+#### Relinquish resources on compute node
 ```bash
 exit
 ```
@@ -348,10 +348,10 @@ You should be returned to the login node
 ```bash
 tmux
 ```
-You should see green bar
+You should see green bar along the bottom of your terminal window
     
 #### Run salloc
 ```bash
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/21/20" --qos=normal srun --pty bash -i -l
 ```
-This command will hang as its waiting until Wednesday to obtain resources. Detach from tmux by pressing "ctrl+b" followed by "d" key. This will return you to the login node. Write down which one you are on before logging out so we can get back to the tmux session on Wednesday. You can then safely close terminal.
+This command will hang as it is waiting until Wednesday to obtain resources. Detach from tmux by pressing "ctrl+b" followed by "d" key. This will return you to the login node. Write down which one you are on before logging out so we can get back to the tmux session on Wednesday. You can then safely close terminal.
