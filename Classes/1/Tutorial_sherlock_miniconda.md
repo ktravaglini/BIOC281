@@ -56,7 +56,7 @@ Do you accept the license terms? [yes|no]
 
 ```
 Miniconda3 will now be installed into this location:
-/home/users/SUNetID/miniconda3
+/home/users/<SUNetID>/miniconda3
 
   - Press ENTER to confirm the location
   - Press CTRL-C to abort the installation
@@ -78,7 +78,7 @@ rm -fr Miniconda3-latest-Linux-x86_64.sh
 ```
 
 ## Like FarmShare check if "base" conda installed correctly
-These should all point binaries in to /home/groups/<GroupName>/miniconda3/bin
+These should all point binaries in to /home/groups/\<GroupName\>/miniconda3/bin
 ```bash
 which conda
 which python
