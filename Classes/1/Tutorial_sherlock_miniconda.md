@@ -302,6 +302,7 @@ rm -rf udunits-2.2.26*
 ```
 
 #### Add the newly installed package's location to you make flags on your ~/.bashrc
+```bash
 echo 'export LIBRARY_PATH="$GROUP_HOME/udunitsv2.2.26/lib:$LIBRARY_PATH"' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH="$GROUP_HOME/udunitsv2.2.26/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
 echo 'export PATH="$GROUP_HOME/udunitsv2.2.26/bin:$PATH"' >> ~/.bashrc
