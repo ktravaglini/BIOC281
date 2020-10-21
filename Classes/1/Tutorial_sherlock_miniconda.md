@@ -1,3 +1,8 @@
+## Load gcc 10
+```bash
+ml load gcc/10.1.0
+```
+
 ## backup your old \~/\.bashrc
 ```bash
 cp ~/.bashrc ~/.bashrc.old
@@ -84,7 +89,7 @@ conda install -c conda-forge python-igraph leidenalg jupyterlab nodejs adjustTex
 conda install -c conda-forge cython cmake
 conda install scvi -c bioconda -c conda-forge
 conda install -c bioconda -c conda-forge samtools kallisto mygene
-pip install MulticoreTSNE bbknn velocyto
+pip install scanpy==1.6 MulticoreTSNE bbknn velocyto
 pip install seaborn==0.10
 pip install synapseclient[pandas,pysftp]
 ```
@@ -92,6 +97,7 @@ pip install synapseclient[pandas,pysftp]
 ## Fetch some binaries and scripts and install in "singlecell" environment
 ```bash
 wget --quiet https://github.com/alexdobin/STAR/archive/2.6.1d.tar.gz
+tar -xf 2.6.1d.tar.gz
 cp ./STAR-2.6.1d/bin/Linux_x86_64/* ./miniconda3/envs/singlecell/bin/
 
 wget --quiet http://downloads.sourceforge.net/project/skewer/Binaries/skewer-0.2.2-linux-x86_64 -O ./miniconda3/envs/singlecell/bin/skewer
@@ -159,7 +165,7 @@ ml save
 echo 'module load R/4.0.2 java physics gdal proj geos' >> ~/.bashrc
 echo -e "AR=gcc-ar\nNM=gcc-nm\nRANLIB=gcc-ranlib" > ~/.Renviron
 
-echo -e "options(Ncpus = 4)\nmessage(\"\\\033[38;05;208mHi <SUNetID>, welcome to R...\\\033[00m\")\nSys.setenv(RETICULATE_PYTHON = \"/home/<SUNetID>/miniconda3/envs/singlecell/bin/python\")" >> ~/.Rprofile
+echo -e "options(Ncpus = 4)\nmessage(\"\\\033[38;05;208mHi <SUNetID>, welcome to R...\\\033[00m\")\nSys.setenv(RETICULATE_PYTHON = \"/home/groups/<PI_Name>/miniconda3/envs/singlecell/bin/python\")" >> ~/.Rprofile
 ```
 
 ## Run R
@@ -217,6 +223,7 @@ salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=no
 
 Once resources have been allocated to you, run jupyter lab -- pick a port anywhere in the range 49152-65335. Example shown below
 ```bash
+conda activate singlecell
 jupyter lab --no-browser --port=<Port#>
 ```
 
