@@ -125,7 +125,7 @@ wget --quiet http://downloads.sourceforge.net/project/skewer/Binaries/skewer-0.2
 chmod +x ./miniconda3/envs/singlecell/bin/skewer
 
 wget --quiet https://github.com/arq5x/bedtools2/releases/download/v2.29.2/bedtools.static.binary -O ./miniconda3/envs/singlecell/bin/bedtools
-chmod a+x ~/miniconda3/envs/singlecell/bin/bedtools
+chmod a+x ./miniconda3/envs/singlecell/bin/bedtools
 
 wget --quiet https://ccb.jhu.edu/software/tophat/downloads/tophat-2.1.1.Linux_x86_64.tar.gz
 tar -xf tophat-2.1.1.Linux_x86_64.tar.gz
