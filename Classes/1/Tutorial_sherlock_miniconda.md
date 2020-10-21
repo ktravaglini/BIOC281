@@ -139,7 +139,6 @@ rm -rf *2.6.1d* *tophat*
 wget --quiet http://hsc.stanford.edu/resources/cellranger-4.0.0.tar.gz
 tar xf ./cellranger-4.0.0.tar.gz
 echo 'export PATH="$GROUP_HOME/cellranger-4.0.0:$PATH"' >> ~/.bashrc
-source ~/.bashrc
 ```
 
 ## Configure environment To access MariaDB server at UCSC and use their tools and utilities. Details: "https://genome.ucsc.edu/goldenPath/help/mysql.html"
