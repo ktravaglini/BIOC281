@@ -22,7 +22,8 @@ fi
 # User specific aliases and functions
 EOF
 ```
-## logout and login again to Sherlock
+
+**IMPORTANT:** Logout and login again to Sherlock
 
 ## Load gcc 10 for building R and python packages
 ```bash
