@@ -1,6 +1,6 @@
 # Tutorial 1 - For Sherlock
 
-## backup your old \~/\.bashrc
+## Backup your old \~/\.bashrc
 ```bash
 cp ~/.bashrc ~/.bashrc.old
 ## make another backup just in case!!
