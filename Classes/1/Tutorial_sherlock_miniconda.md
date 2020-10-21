@@ -6,7 +6,7 @@ cp ~/.bashrc ~/.bashrc.old
 ## make another backup just in case!!
 cp ~/.bashrc ~/.bashrc.bak
 ```
-## Create a clean bashrc
+## Create a clean ~/.bashrc
 ```bash
 cat > ~/.bashrc << EOF
 # .bashrc
