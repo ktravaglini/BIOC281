@@ -56,6 +56,7 @@ Install a missing dependency, louvain, for today's  scanpy notebook
 Louvain is largely replaced by leiden these days. However, louvain may still be usefull to recreate plots for some of published data for comparison
 ```bash
 pip install louvain
+conda install -c conda-forge python-igraph=0.8.2 seaborn=0.10
 ```
 
 ## Pull the GitHub repository
