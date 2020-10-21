@@ -255,7 +255,7 @@ salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --qos=no
 ```
 
 #### Once resources have been allocated to you, launch jupyter
-**Note:**Pick a port anywhere in the range 49152-65335
+**Note:** Pick a port anywhere in the range 49152-65335
 ```bash
 conda activate singlecell
 jupyter lab --no-browser --port=<Port#>
@@ -264,7 +264,7 @@ If the port you chose is not available (likely because it is in use by someone e
 
 #### Now on you local computer create an SSH tunnel to Sherlock
 **Note:** that you need to input the specicific compute node name that was allocated to you
-It is the part of your command prompt bolded here: (singlecell) [ktrav@**sh03-01n52** ~]$
+It is the part of your command prompt bolded here: (singlecell) [\<SUNetID\>@**sh03-01n52** ~]$
 
 On a Mac, run this command in Terminal, on a PC run it on PowerShell
 ```bash
