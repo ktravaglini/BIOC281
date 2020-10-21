@@ -276,7 +276,7 @@ ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <P
 
 You can now access terminal through Jupyter to install the R packages that we need.
 
-While you are working through the R installs (some of them can take a while), please open the Tutorial 1 excersize in your browser on jupyter (File > Open from Path... > "/home/groups/<GroupName>/BIOC281/Classes/1/Tutorial 1.ipynb") and complete it. Periodically, go back check the terminal to see if the package installations have completed.
+While you are working through the R installs (some of them can take a while), please open the Tutorial 1 excersize in your browser on jupyter (File > Open from Path... > "/home/groups/\<GroupName\>/BIOC281/Classes/1/Tutorial 1.ipynb") and complete it. Periodically, go back check the terminal to see if the package installations have completed.
 
 **Note:** When finished, please save the outputs of Tutorial 1.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas. Aditotors if interested can email us the results.
 
