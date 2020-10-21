@@ -3,7 +3,7 @@
 ## Connect to the Sherlock cluster
 Run this on Terminal on a Mac or linux computer and PowerShell on Windows 10
 ```bash
-ssh <SUNetID>@sherlock.stanford.edu
+ssh <SUNetID>@login.sherlock.stanford.edu
 ```
 
 ## Backup your old \~/\.bashrc
@@ -37,7 +37,7 @@ ml load gcc/10.1.0
 ```
 
 ## Navigate to $GROUP_HOME
-We're installing packages here because it contains more space on the Sherlock cluster (100GB) compared to the $HOME folder (15GB)
+We're installing packages in $GROUP_HOME for two reasons: First, it has more space allocated per lab (1TB) compared to the $HOME folder (15GB), and second, the setup after install can be used by any lab member since this location is accessible to everyone in the group.
 ```bash
 cd $GROUP_HOME
 ```
@@ -74,10 +74,10 @@ by running conda init? [yes|no]
 ## Source the ~/.bashrc that was modified by conda to activate "base" conda environment
 ```bash
 source ~/.bashrc
-rm -fr Miniconda3-latest-Linux-x86_64.sh
+rm Miniconda3-latest-Linux-x86_64.sh
 ```
 
-## Like FarmShare check if "base" conda installed correctly
+## Similar to FarmShare check if "base" conda installed correctly
 These should all point binaries in to /home/groups/\<GroupName\>/miniconda3/bin
 ```bash
 which conda
@@ -262,11 +262,11 @@ jupyter lab --no-browser --port=<Port#>
 ```
 If the port you chose is not available (likely because it is in use by someone else), terminate jupyter lab and run it again with a different port.
 
-#### Now on you local computer create an SSH tunnel to Sherlock
-**Note:** that you need to input the specicific compute node name that was allocated to you
+#### Now on your local computer create an SSH tunnel to Sherlock
+**Note:** that you need to input the specicific compute node name that was allocated to you.
 It is the part of your command prompt bolded here: (singlecell) [\<SUNetID\>@**sh03-01n52** ~]$
 
-On a Mac, run this command in Terminal, on a PC run it on PowerShell
+On a Mac, run this command in Terminal, on a PC run it within PowerShell
 ```bash
 ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <Port#>:localhost:<Port#> -N <shXX-XXnXX>
 ```
@@ -301,7 +301,7 @@ make -j8 && make install && cd ..
 rm -rf udunits-2.2.26*
 ```
 
-#### Add the newly installed package's location to you make flags on your ~/.bashrc
+#### Add the udunit2 package's compiler and runtime PATH locations to your ~/.bashrc
 ```bash
 echo 'export LIBRARY_PATH="$GROUP_HOME/udunitsv2.2.26/lib:$LIBRARY_PATH"' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH="$GROUP_HOME/udunitsv2.2.26/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
@@ -336,11 +336,11 @@ rm -fr ./CytoTRACE_0.3.3.tar.gz
     
 If you have finished the first exercise, saved the output and uploaded it to canvas you can now return to the terminal window you used to launch jupyter. Kill the program by pressing "ctrl+c" twice
 
-#### Relinquish control node as we are done with computing
+#### Relinquish control of the "compute" node as we are done with computing
 ```bash
 exit
 ```
-You should be returned to the login node
+You should be returned to the "login" node
 
 ## Request resources for the next class
     
@@ -348,10 +348,10 @@ You should be returned to the login node
 ```bash
 tmux
 ```
-You should see green bar
+You should see a green bar at the bottom of the terminal
     
 #### Run salloc
 ```bash
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/21/20" --qos=normal srun --pty bash -i -l
 ```
-This command will hang as its waiting until Wednesday to obtain resources. Detach from tmux by pressing "ctrl+b" followed by "d" key. This will return you to the login node. Write down which one you are on before logging out so we can get back to the tmux session on Wednesday. You can then safely close terminal.
+This command will hang as its waiting until Wednesday to obtain resources. Detach from tmux by pressing "ctrl+b" followed by "d" key. This will return you from the "tmux" prompt to the main "login" prompt (no green bar). Write down which "login" node your persistent "tmux" session is running before logging out so we can get back to the same "tmux" session on Wednesday. You can then safely close terminal.
