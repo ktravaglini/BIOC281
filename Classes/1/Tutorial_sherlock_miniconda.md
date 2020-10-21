@@ -223,7 +223,7 @@ jupyter lab --no-browser --port=<Port#>
 ## Now on you Mac or PC local shell run the following command.
 Note that you need to input the specicific compute node name that was allocated to you.
 ```bash
-ssh -L <Port#>:localhost:<Port#> sherlock ssh -L <Port#>:localhost:<Port#> -N sh-xxx-xx
+ssh -L <Port#>:localhost:<Port#> login.sherlock.stanford.edu ssh -L <Port#>:localhost:<Port#> -N sh<xx-xx>
 ```
 
 At this you find that the port you have chosen is not available--probably used by someone else. If so, terminate jupyter lab and run it again with a different port#. then try tunnelling again with that new port#.
