@@ -1,5 +1,11 @@
 # Tutorial 1 - For Sherlock
 
+## Connect to the Sherlock cluster
+Run this on Terminal on a Mac or linux computer and PowerShell on Windows 10
+```bash
+ssh <SUNetID>@sherlock.stanford.edu
+```
+
 ## Backup your old \~/\.bashrc
 ```bash
 cp ~/.bashrc ~/.bashrc.old
