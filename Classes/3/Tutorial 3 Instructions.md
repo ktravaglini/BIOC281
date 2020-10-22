@@ -7,7 +7,7 @@ To begin the tutorials, we need to request dedicated resources on Stanford FarmS
 ```bash
 ssh <SUNetID>@rice.stanford.edu
 ```
-**Note**: Sherlock users, please use <SUNetID>@login.sherlock.stanford.edu
+**Note**: Sherlock users, please use \<SUNetID\>@login.sherlock.stanford.edu
 
 ### Switch to the persistent terminal window
 The resources we requested on Wednessday should be ready to go. To check specifics issue "squeue" command:
@@ -26,7 +26,7 @@ ssh wheat<xx>
 ```
 You can tell if your terminal has switched from something like "(base) \<SUNetID\>\@**rice**\<XX\>:\~\$" to "(base) \<SUNetID\>\@**wheat**\<XX\>:\~\$"
 
-**Note:** Sherlock users will be connecting to a compute node.
+**Note:** Sherlock users will be connecting to a compute node instead of wheat.
 
 Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above
 and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" ses
@@ -117,7 +117,8 @@ tmux
 ## You should see the green tmux bar. Now run salloc requesting resources for the next class
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/26/20" --qos=interactive srun --pty bash -i -l
 ```
-    
+**Note:** Sherlock users should use --quit=normal as Sherlock does not have an interactive quality of service like FarmShare.
+
 You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the rice node# (reice\<xx\>) w
 here your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely cl
 ose your terminal window. See you next class!
