@@ -82,7 +82,6 @@ export CMAKE_PREFIX_PATH=\\
 \$SAPP/sqlitev3.33:\\
 \$CMAKE_PREFIX_PATH
 EOF
-EOF
 ```
 
 **IMPORTANT:** Logout and login again to SCG
