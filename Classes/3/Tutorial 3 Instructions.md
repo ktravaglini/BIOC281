@@ -7,6 +7,8 @@ To begin the tutorials, we need to request dedicated resources on Stanford FarmS
 ```bash
 ssh <SUNetID>@rice.stanford.edu
 ```
+**Note**: Sherlock users, please use <SUNetID>@login.sherlock.stanford.edu
+
 ### Switch to the persistent terminal window
 The resources we requested on Wednessday should be ready to go. To check specifics issue "squeue" command:
 ```bash
@@ -23,6 +25,8 @@ Login to wheat node assigned to you
 ssh wheat<xx>
 ```
 You can tell if your terminal has switched from something like "(base) \<SUNetID\>\@**rice**\<XX\>:\~\$" to "(base) \<SUNetID\>\@**wheat**\<XX\>:\~\$"
+
+**Note:** Sherlock users will be connecting to a compute node.
 
 Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above
 and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" ses
@@ -41,10 +45,16 @@ conda activate singlecell
 ```bash
 jupyter lab --no-browser
 ```
+**Note:** Sherlock users will need to specify a port between 49152-65335 by adding --port=<Port#> as before.
 
 ## Create an SSH tunnel (on your system)
 ```bash
 ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
+```
+
+**Note:** Sherlock users will need the more complex tunneling command they have used before. The last \<shXX-XXnXX\> part comes from the node they are on, it is the part of your command prompt bolded here: (singlecell) [\<SUNetID\>@**sh03-01n52** ~]$
+```
+ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <Port#>:localhost:<Port#> -N <shXX-XXnXX>
 ```
 
 ## Login to jupyter in your browser, open a Terminal window, and activate the single cell environment
@@ -52,8 +62,7 @@ ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 conda activate singlecell
 ```
 
-Install a missing dependency, louvain, for today's  scanpy notebook
-Louvain is largely replaced by leiden these days. However, louvain may still be usefull to recreate plots for some of published data for comparison
+Install a missing dependency, louvain, for today's scanpy notebook and resolve a package conflict created by a new version of igraph (released between making the tutorials and the start of the class).
 ```bash
 pip install louvain
 conda install -c conda-forge python-igraph=0.8.2 seaborn=0.10
