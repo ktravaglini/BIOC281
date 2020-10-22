@@ -72,7 +72,6 @@ ssh -L <PORT>:localhost:<PORT> <SUNetID>@login.sherlock.stanford.edu ssh -L <POR
 - ***DO THIS ANYTIME YOU START A NEW TERMINAL IN JUPYTER***
 
 ```bash
-cd $GROUP_DIR
 conda activate singlecell
 ```
 
@@ -328,84 +327,84 @@ cat > STARmale_scr << EOF
 #!/bin/bash
 
 ## Set reference genome, genome indexes, junction and annotation database directory paths
-REF=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_PRMSK
-GFA=\$REF/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
-ANN=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
-FTQ=\$HOME/BIOC281/Classes/2/fastq/male
+REF=$GROUP_HOME/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_PRMSK
+GFA=$REF/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
+ANN=$GROUP_HOME/BIOC281/Classes/2/RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
+FTQ=$GROUP_HOME/BIOC281/Classes/2/fastq/male
 
 ## Set parameters, see https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 ## to see explanation for the paramters used
-CmmnPrms="--runThreadN 4 --outSJfilterReads Unique --outFilterType BySJout --outSAMunmapped Within \\
---outSAMattributes NH HI AS nM NM MD jM jI XS MC ch --outFilterMultimapNmax 20 --outFilterMismatchNmax 999 --alignIntronMin 20 \\
---outFilterMismatchNoverReadLmax 0.04 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \\
+CmmnPrms="--runThreadN 4 --outSJfilterReads Unique --outFilterType BySJout --outSAMunmapped Within \
+--outSAMattributes NH HI AS nM NM MD jM jI XS MC ch --outFilterMultimapNmax 20 --outFilterMismatchNmax 999 --alignIntronMin 20 \
+--outFilterMismatchNoverReadLmax 0.04 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \
 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --sjdbScore 1"
-AdtlPrms="--outSAMtype BAM SortedByCoordinate --outBAMcompression 10 --limitBAMsortRAM 57000000000 \\
+AdtlPrms="--outSAMtype BAM SortedByCoordinate --outBAMcompression 10 --limitBAMsortRAM 57000000000 \
 --quantMode TranscriptomeSAM GeneCounts --quantTranscriptomeBAMcompression 10 --outSAMstrandField intronMotif"
 
 ## Define directory structure for run
-export OWD=\`pwd\`
-export SCR=\$HOME/scratch_male
-export STR=\$SCR/STARun
-export RDIR=\$SCR/reads
+export OWD=`pwd`
+export SCR=$GROUP_HOME/scratch_male
+export STR=$SCR/STARun
+export RDIR=$SCR/reads
 
 ## create scratch run directory and read directory 
-mkdir -p \$RDIR
+mkdir -p $RDIR
 
 ## concatenate read files if they are split into multiple files
-cat \$FTQ/*R1*.fastq.gz > \$SCR/male_R1.fastq.gz
-cat \$FTQ/*R2*.fastq.gz > \$SCR/male_R2.fastq.gz
+cat $FTQ/*R1*.fastq.gz > $SCR/male_R1.fastq.gz
+cat $FTQ/*R2*.fastq.gz > $SCR/male_R2.fastq.gz
 
 ## decompress read files
-gzip -d \$SCR/*.fastq.gz
+gzip -d $SCR/*.fastq.gz
 
 ## Start skewer to trim reads for quality of base calls and remove adapter sequences at 3' ends
 ## While STAR employs soft clipping to remove ends of reads that do not align, best practice is to
 ## NOT leave this to chance and to "hard clip" the sequences before alignment
-cd \$RDIR
+cd $RDIR
 
 ## If Truseq Illumina adapters (obsolete) were used to prepare the library then use the following adapter sequences
-#skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
-#-y AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \\
-#-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet \$SCR/male_R1.fastq \$SCR/male_R2.fastq
+#skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \
+#-y AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \
+#-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet $SCR/male_R1.fastq $SCR/male_R2.fastq
 
 ## If Nextera Illumina primers were used to prepare the library then use the following adapter sequences
-skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
--y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
--t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet \$SCR/male_R1.fastq \$SCR/male_R2.fastq
+skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \
+-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \
+-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet $SCR/male_R1.fastq $SCR/male_R2.fastq
 
 ## If custom CZBiohub IDT primers (Index=12bp) were used to prepare the library then use the following adapter sequences
-#skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
-#-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
-#-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet \$SCR/male_R1.fastq \$SCR/male_R2.fastq
+#skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \
+#-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \
+#-t 4 -q 21 -l 31 -n -u -o male -f sanger --quiet $SCR/male_R1.fastq $SCR/male_R2.fastq
 
 ## Start STAR alignment
-mkdir -p \$STR/male_1p
-cd \$STR
+mkdir -p $STR/male_1p
+cd $STR
 
-STAR \$CmmnPrms \$AdtlPrms --genomeDir \$REF --outFileNamePrefix \$STR/male_1p/male.1p. \\
---readFilesIn \$RDIR/male-trimmed-pair1.fastq \$RDIR/male-trimmed-pair2.fastq
+STAR $CmmnPrms $AdtlPrms --genomeDir $REF --outFileNamePrefix $STR/male_1p/male.1p. \
+--readFilesIn $RDIR/male-trimmed-pair1.fastq $RDIR/male-trimmed-pair2.fastq
  
 ## Create index for the mapped bam file; this will make it easier to browse the mapped bam file in IGV browser
-samtools index \$STR/male_1p/male.1p.Aligned.sortedByCoord.out.bam
+samtools index $STR/male_1p/male.1p.Aligned.sortedByCoord.out.bam
 
 ## Compress skwer-processed reads to save space.
-gzip --best \$RDIR/*
+gzip --best $RDIR/*
 
 ## Compress files that are needed for downstream analysis
-find \$STR -type f \( -name "*.out" -o -name "*.tab" -o -name "*.sjdb" -o -name "*.results" \) | xargs gzip -9
+find $STR -type f \( -name "*.out" -o -name "*.tab" -o -name "*.sjdb" -o -name "*.results" \) | xargs gzip -9
 
 ## Cleanup and copy back all important files
-if [ ! -d \$OWD/reads ];
+if [ ! -d $OWD/reads ];
 then 
-mkdir -p \$OWD/{reads,STAResults}
+mkdir -p $OWD/{reads,STAResults}
 fi
 
 ## Copy back important files
-cp -a \$STR/male_1p \$OWD/STAResults/
-cp -a \$RDIR/* \$OWD/reads/
+cp -a $STR/male_1p $OWD/STAResults/
+cp -a $RDIR/* $OWD/reads/
 
 ## Remove scratch directory
-rm -rf \$SCR
+rm -rf $SCR
 exit 0
 EOF
 ```
@@ -423,84 +422,84 @@ cat > STARfemale_scr << EOF
 #!/bin/bash
 
 ## Set reference genome, genome indexes, junction and annotation database directory paths
-REF=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_YMSK
-GFA=\$REF/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
-ANN=\$HOME/BIOC281/Classes/2/RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
-FTQ=\$HOME/BIOC281/Classes/2/fastq/female
+REF=$GROUP_HOME/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/STARIndex/100bp_YMSK
+GFA=$REF/hg38.RefSeq.mini.PARYhMSK.ERCC.fa
+ANN=$GROUP_HOME/BIOC281/Classes/2/RefSeq_Oct2020/Annotation/hg38.refGene.ERCC.gtf
+FTQ=$GROUP_HOME/BIOC281/Classes/2/fastq/female
 
 ## Set parameters, see https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 ## to see explanation for the paramters used
-CmmnPrms="--runThreadN 4 --outSJfilterReads Unique --outFilterType BySJout --outSAMunmapped Within \\
---outSAMattributes NH HI AS nM NM MD jM jI XS MC ch --outFilterMultimapNmax 20 --outFilterMismatchNmax 999 --alignIntronMin 20 \\
---outFilterMismatchNoverReadLmax 0.04 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \\
+CmmnPrms="--runThreadN 4 --outSJfilterReads Unique --outFilterType BySJout --outSAMunmapped Within \
+--outSAMattributes NH HI AS nM NM MD jM jI XS MC ch --outFilterMultimapNmax 20 --outFilterMismatchNmax 999 --alignIntronMin 20 \
+--outFilterMismatchNoverReadLmax 0.04 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \
 --alignSJoverhangMin 8 --alignSJDBoverhangMin 1 --sjdbScore 1"
-AdtlPrms="--outSAMtype BAM SortedByCoordinate --outBAMcompression 10 --limitBAMsortRAM 57000000000 \\
+AdtlPrms="--outSAMtype BAM SortedByCoordinate --outBAMcompression 10 --limitBAMsortRAM 57000000000 \
 --quantMode TranscriptomeSAM GeneCounts --quantTranscriptomeBAMcompression 10 --outSAMstrandField intronMotif"
 
 ## Define directory structure for run
-export OWD=\`pwd\`
-export SCR=\$HOME/scratch_female
-export STR=\$SCR/STARun
-export RDIR=\$SCR/reads
+export OWD=`pwd`
+export SCR=$GROUP_HOME/scratch_female
+export STR=$SCR/STARun
+export RDIR=$SCR/reads
 
 ## create scratch run directory and read directory
-mkdir -p \$RDIR
+mkdir -p $RDIR
 
 ## concatenate read files if they are split into multiple files
-cat \$FTQ/*R1*.fastq.gz > \$SCR/female_R1.fastq.gz
-cat \$FTQ/*R2*.fastq.gz > \$SCR/female_R2.fastq.gz
+cat $FTQ/*R1*.fastq.gz > $SCR/female_R1.fastq.gz
+cat $FTQ/*R2*.fastq.gz > $SCR/female_R2.fastq.gz
 
 ## decompress read files
-gzip -d \$SCR/*.fastq.gz
+gzip -d $SCR/*.fastq.gz
 
 ## Start skewer to trim reads for quality of base calls and remove adapter sequences at 3' ends
 ## While STAR employs soft clipping to remove ends of reads that do not align, best practice is to
-## NOT leave this to chance and to "hard clip" the sequences before alignmentcd \$RDIR
-cd \$RDIR
+## NOT leave this to chance and to "hard clip" the sequences before alignmentcd $RDIR
+cd $RDIR
 
 ## If Truseq Illumina adapters (obsolete) were used to prepare the library then use the following adapter sequences
-#skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
-#-y AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \\
-#-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet \$SCR/female_R1.fastq \$SCR/female_R2.fastq
+#skewer -x AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG \
+#-y AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \
+#-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet $SCR/female_R1.fastq $SCR/female_R2.fastq
 
 ## If Nextera Illumina primers were used to prepare the library then use the following adapter sequences
-skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
--y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
--t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet \$SCR/female_R1.fastq \$SCR/female_R2.fastq
+skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \
+-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \
+-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet $SCR/female_R1.fastq $SCR/female_R2.fastq
 
 ## If custom CZBiohub IDT primers (Index=12bp) were used to prepare the library then use the following adapter sequences
-#skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \\
-#-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \\
-#-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet \$SCR/female_R1.fastq \$SCR/female_R2.fastq
+#skewer -x CTGTCTCTTATACACATCTCCGAGCCCACGAGACNNNNNNNNNNNNATCTCGTATGCCGTCTTCTGCTTG \
+#-y CTGTCTCTTATACACATCTGACGCTGCCGACGANNNNNNNNNNNNGTGTAGATCTCGGTGGTCGCCGTATCATT \
+#-t 4 -q 21 -l 31 -n -u -o female -f sanger --quiet $SCR/female_R1.fastq $SCR/female_R2.fastq
 
 ## Start STAR alignment
-mkdir -p \$STR/female_1p
-cd \$STR
+mkdir -p $STR/female_1p
+cd $STR
 
-STAR \$CmmnPrms \$AdtlPrms --genomeDir \$REF --outFileNamePrefix \$STR/female_1p/female.1p. \\
---readFilesIn \$RDIR/female-trimmed-pair1.fastq \$RDIR/female-trimmed-pair2.fastq
+STAR $CmmnPrms $AdtlPrms --genomeDir $REF --outFileNamePrefix $STR/female_1p/female.1p. \
+--readFilesIn $RDIR/female-trimmed-pair1.fastq $RDIR/female-trimmed-pair2.fastq
 
 ## Create index for the mapped bam file; this will make it easier to browse the mapped bam file in IGV browser
-samtools index \$STR/female_1p/female.1p.Aligned.sortedByCoord.out.bam
+samtools index $STR/female_1p/female.1p.Aligned.sortedByCoord.out.bam
 
 ## compress skwer-processed reads to save space.
-gzip --best \$RDIR/*
+gzip --best $RDIR/*
 
 ## compress files that are needed for downstream analysis
-find \$STR -type f \( -name "*.out" -o -name "*.tab" -o -name "*.sjdb" -o -name "*.results" \) | xargs gzip -9
+find $STR -type f \( -name "*.out" -o -name "*.tab" -o -name "*.sjdb" -o -name "*.results" \) | xargs gzip -9
 
 ## Cleanup and Copy back all important files
-if [ ! -d \$OWD/reads ];
+if [ ! -d $OWD/reads ];
 then
-mkdir -p \$OWD/{reads,STAResults}
+mkdir -p $OWD/{reads,STAResults}
 fi
 
 ## Copy back important files
-cp -a \$STR/female_1p \$OWD/STAResults/
-cp -a \$RDIR/* \$OWD/reads/
+cp -a $STR/female_1p $OWD/STAResults/
+cp -a $RDIR/* $OWD/reads/
 
 ## Remove scratch directory
-rm -rf \$SCR
+rm -rf $SCR
 exit 0
 EOF
 ```
@@ -545,7 +544,7 @@ Start "tmux" session on Sherlock and then then request resources
 ```bash
 tmux
 ## You should see the green tmux bar. Now run salloc requesting resources for the next class
-salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/23/20" --qos=interactive srun --pty bash -i -l
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/23/20" --qos=normal srun --pty bash -i -l
 ```
     
 You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the Sherlock node# (sh\<xx-xxxx\>) where your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely close your terminal window. See you next class!
