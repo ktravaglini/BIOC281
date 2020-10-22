@@ -1,6 +1,6 @@
 # Tutorial 1 - For SCG
 
-## Connect to the Sherlock cluster
+## Connect to the SCG cluster
 Run this on Terminal on a Mac or linux computer and PowerShell on Windows 10
 ```bash
 ssh <SUNetID>@login.scg.stanford.edu
@@ -308,7 +308,7 @@ git clone https://github.com/ktravaglini/BIOC281.git
 jupyter lab --no-browser
 ```
 
-Note down the <Port> in the jupyter lab web URL
+Note down the \<Port\> in the jupyter lab web URL
 
 #### Now on your local computer create an SSH tunnel to Sherlock
 
