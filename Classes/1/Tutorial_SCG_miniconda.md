@@ -106,7 +106,7 @@ make -j64 && make install && cd ..
 wget --quiet https://github.com/OSGeo/gdal/releases/download/v3.1.3/gdal-3.1.3.tar.gz
 tar xf gdal-3.1.3.tar.gz 
 cd gdal-3.1.3
-./configure --prefix=/home/<SUNetID>/sysapps/gdalv3.1.3 --with-proj=/home/sinhar/sysapps/projv7.1.1
+./configure --prefix=/home/<SUNetID>/sysapps/gdalv3.1.3 --with-proj=/home/<SUNetID>/sysapps/projv7.1.1
 make -j64 && make install && cd ..
 
 rm -rf sqlite-autoconf-3330000* proj-7.1.1* gdal-3.1.3*
