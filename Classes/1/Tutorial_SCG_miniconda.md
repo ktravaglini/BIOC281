@@ -92,13 +92,13 @@ EOF
 mkdir sysapps && cd sysapps
 
 wget --quiet https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
-tar xvf sqlite-autoconf-3330000.tar.gz 
+tar xf sqlite-autoconf-3330000.tar.gz 
 cd sqlite-autoconf-3330000
 ./configure --prefix=/home/<SUNetID>/sysapps/sqlitev3.33 --disable-static --enable-fts5 CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
 make -j64 && make install && cd ..
 
 wget --quiet https://download.osgeo.org/proj/proj-7.1.1.tar.gz
-tar xvf proj-7.1.1.tar.gz
+tar xf proj-7.1.1.tar.gz
 cd proj-7.1.1
 ./configure --prefix=/home/<SUNetID>/sysapps/projv7.1.1
 make -j64 && make install && cd ..
