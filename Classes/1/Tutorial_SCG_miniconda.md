@@ -187,7 +187,7 @@ pip install synapseclient[pandas,pysftp]
 ```bash
 wget --quiet https://github.com/alexdobin/STAR/archive/2.6.1d.tar.gz
 tar -xf 2.6.1d.tar.gz
-cp ./STAR-2.6.1d/bin/Linux_x86_64/* ./miniconda3/envs/singlecell/bin/
+cp ./STAR-2.6.1d/bin/Linux_x86_64/* ~/miniconda3/envs/singlecell/bin/
 
 wget --quiet http://downloads.sourceforge.net/project/skewer/Binaries/skewer-0.2.2-linux-x86_64 -O ~/miniconda3/envs/singlecell/bin/skewer
 chmod +x ~/miniconda3/envs/singlecell/bin/skewer
