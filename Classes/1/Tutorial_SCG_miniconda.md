@@ -253,7 +253,7 @@ cd R-patched/tools/ && ./rsync-recommended
 ./link-recommended && cd ..
 ./configure --prefix=$HOME/apps/R AR=gcc-ar NM=gcc-nm RANLIB=gcc-ranlib LDFLAGS='-L/scg/apps/software/gcc/9.2.0-centos_7/lib64 -L/scg/apps/software/gcc/9.2.0-centos_7/lib64' CFLAGS=-I/scg/apps/software/gcc/9.2.0-centos_7/include --enable-lto
 make -j64 && make install && cd
-rm -rf R-patched/
+rm -rf apps/R-patched/
 
 ## setup R profile and environment
 echo -e "AR=gcc-ar\nNM=gcc-nm\nRANLIB=gcc-ranlib" > ~/.Renviron
