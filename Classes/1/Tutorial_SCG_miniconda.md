@@ -206,6 +206,7 @@ rm -rf *2.6.1d* *tophat*
 cd && mkdir apps && cd apps
 wget --quiet http://hsc.stanford.edu/resources/cellranger-4.0.0.tar.gz
 tar xf ./cellranger-4.0.0.tar.gz
+rm cellranger-4.0.0.tar.gz
 which cellranger
 ```
 
