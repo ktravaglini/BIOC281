@@ -7,6 +7,8 @@ To begin the tutorials, we need to request dedicated resources on Stanford FarmS
 ```bash
 ssh <SUNetID>@rice.stanford.edu
 ```
+**Note**: Sherlock users, please use \<SUNetID\>@login.sherlock.stanford.edu
+
 ### Switch to the persistent terminal window
 The resources we requested on Wednessday should be ready to go. To check specifics issue "squeue" command:
 ```bash
@@ -23,6 +25,8 @@ Login to wheat node assigned to you
 ssh wheat<xx>
 ```
 You can tell if your terminal has switched from something like "(base) \<SUNetID\>\@**rice**\<XX\>:\~\$" to "(base) \<SUNetID\>\@**wheat**\<XX\>:\~\$"
+
+**Note:** Sherlock users will be connecting to a compute node instead of wheat.
 
 Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above
 and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" ses
@@ -41,10 +45,16 @@ conda activate singlecell
 ```bash
 jupyter lab --no-browser
 ```
+**Note:** Sherlock users will need to specify a port between 49152-65335 by adding --port=<Port#> as before.
 
 ## Create an SSH tunnel (on your system)
 ```bash
 ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
+```
+
+**Note:** Sherlock users will need the more complex tunneling command they have used before. The last \<shXX-XXnXX\> part comes from the node they are on, it is the part of your command prompt bolded here: (singlecell) [\<SUNetID\>@**sh03-01n52** ~]$
+```
+ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <Port#>:localhost:<Port#> -N <shXX-XXnXX>
 ```
 
 ## Login to jupyter in your browser, open a Terminal window, and activate the single cell environment
@@ -52,8 +62,7 @@ ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
 conda activate singlecell
 ```
 
-Install a missing dependency, louvain, for today's  scanpy notebook
-Louvain is largely replaced by leiden these days. However, louvain may still be usefull to recreate plots for some of published data for comparison
+Install a missing dependency, louvain, for today's scanpy notebook and resolve a package conflict created by a new version of igraph (released between making the tutorials and the start of the class).
 ```bash
 pip install louvain
 conda install -c conda-forge python-igraph=0.8.2 seaborn=0.10
@@ -68,23 +77,22 @@ git pull
 ```bash
 cd ~/BIOC281/Classes/3
 ```
-
-## Login to synapse
+**Note:** On sherlock run
 ```bash
-synapse login -u <Username> --remember-me
+cd $GROUP_HOME/BIOC281/Classes/3
 ```
 
-## Download Human Lung Cell Atlas data and metadata from synapse (Travaglini et al (2020) _Nature_)
+## Download Human Lung Cell Atlas data and metadata from hsc.stanford.edu (Travaglini et al (2020) _Nature_)
 This dataset contains ~75,000 cells captured using 10x (90%) and SmartSeq2 (10%) from the lung of 3 human patients.
 
 ```bash
-synapse get syn21560510
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_10x_raw.rds
 
-synapse get syn21560511
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_10x_raw.h5ad
 
-synapse get syn21560409
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_facs_raw.rds
 
-synapse get syn21560410
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_facs_raw.h5ad
 ```
 
 ## Open and complete BIOC281/Classes/3/Tutorial 3 - Seurat.ipypnb
@@ -108,7 +116,7 @@ tmux
 ## You should see the green tmux bar. Now run salloc requesting resources for the next class
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin="13:30:00 10/26/20" --qos=interactive srun --pty bash -i -l
 ```
-    
+**Note:** Sherlock users should use --quit=normal as Sherlock does not have an interactive quality of service like FarmShare.
+
 You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the rice node# (reice\<xx\>) w
-here your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely cl
-ose your terminal window. See you next class!
+here your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely close your terminal window. See you next class!
