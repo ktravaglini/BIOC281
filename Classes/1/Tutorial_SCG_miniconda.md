@@ -87,25 +87,26 @@ EOF
 **IMPORTANT:** Logout and login again to SCG
 
 ## Install sqlite3 PROJ, and GDAL
+**NOTE:** You need to replace your SUNet ID in the commands below
 ```bash
 mkdir sysapps && cd sysapps
 
-wget https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
+wget --quiet https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
 tar xvf sqlite-autoconf-3330000.tar.gz 
 cd sqlite-autoconf-3330000
-./configure --prefix=/home/sinhar/sysapps/sqlitev3.33 --disable-static --enable-fts5 CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+./configure --prefix=/home/<SUNetID>/sysapps/sqlitev3.33 --disable-static --enable-fts5 CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
 make -j64 && make install && cd ..
 
-wget https://download.osgeo.org/proj/proj-7.1.1.tar.gz
+wget --quiet https://download.osgeo.org/proj/proj-7.1.1.tar.gz
 tar xvf proj-7.1.1.tar.gz
 cd proj-7.1.1
-./configure --prefix=/home/sinhar/sysapps/projv7.1.1
+./configure --prefix=/home/<SUNetID>/sysapps/projv7.1.1
 make -j64 && make install && cd ..
 
 wget --quiet https://github.com/OSGeo/gdal/releases/download/v3.1.3/gdal-3.1.3.tar.gz
 tar xf gdal-3.1.3.tar.gz 
 cd gdal-3.1.3
-./configure --prefix=/home/sinhar/sysapps/gdalv3.1.3 --with-proj=/home/sinhar/sysapps/projv7.1.1
+./configure --prefix=/home/<SUNetID>/sysapps/gdalv3.1.3 --with-proj=/home/sinhar/sysapps/projv7.1.1
 make -j64 && make install && cd ..
 
 rm -rf sqlite-autoconf-3330000* proj-7.1.1* gdal-3.1.3*
@@ -172,9 +173,7 @@ conda activate singlecell
 ```bash
 conda install -c conda-forge python-igraph leidenalg jupyterlab nodejs adjustText seaborn scikit-learn statsmodels numba pytables libcurl cython cmake
 
-conda install scvi -c bioconda -c conda-forge
-
-conda install -c bioconda -c conda-forge samtools kallisto mygene
+conda install -c bioconda -c conda-forge samtools kallisto mygene scvi
 
 pip install scanpy==1.6 MulticoreTSNE bbknn velocyto
 
