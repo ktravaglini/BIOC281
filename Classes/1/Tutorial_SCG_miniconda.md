@@ -252,7 +252,7 @@ tar xf R-patched.tar.gz
 cd R-patched/tools/ && ./rsync-recommended
 ./link-recommended && cd ..
 ./configure --prefix=$HOME/apps/R AR=gcc-ar NM=gcc-nm RANLIB=gcc-ranlib LDFLAGS='-L/scg/apps/software/gcc/9.2.0-centos_7/lib64 -L/scg/apps/software/gcc/9.2.0-centos_7/lib64' CFLAGS=-I/scg/apps/software/gcc/9.2.0-centos_7/include --enable-lto
-make -j128 && make install && cd
+make -j64 && make install && cd
 rm -rf R-patched/
 
 ## setup R profile and environment
