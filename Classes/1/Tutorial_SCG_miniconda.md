@@ -235,6 +235,8 @@ pip install ./self-assembling-manifold/.
 
 git clone git://github.com/KrishnaswamyLab/MAGIC.git
 pip install ./MAGIC/python/.
+
+rm -rf SICILIAN/ self-assembling-manifold/ MAGIC/
 ```
 
 ## Install R-4.0.3 and required R packages
