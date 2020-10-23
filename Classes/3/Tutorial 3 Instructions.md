@@ -82,8 +82,8 @@ cd ~/BIOC281/Classes/3
 cd $GROUP_HOME/BIOC281/Classes/3
 ```
 
-## Download Human Lung Cell Atlas data and metadata from hsc.stanford.edu (Travaglini et al (2020) _Nature_)
-This dataset contains ~75,000 cells captured using 10x (90%) and SmartSeq2 (10%) from the lung of 3 human patients.
+## Download Human Lung Cell Atlas data and metadata from hsc.stanford.edu
+This dataset contains ~75,000 cells captured using 10x (90%) and SmartSeq2 (10%) from the lung of 3 human patients. See Travaglini et al (2020) _Nature_ (in press, _bioRxiv_) for details.
 
 ```bash
 wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_10x_raw.rds
