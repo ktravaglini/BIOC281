@@ -77,23 +77,22 @@ git pull
 ```bash
 cd ~/BIOC281/Classes/3
 ```
-
-## Login to synapse
+**Note:** On sherlock run
 ```bash
-synapse login -u <Username> --remember-me
+cd $GROUP_HOME/BIOC281/Classes/3
 ```
 
-## Download Human Lung Cell Atlas data and metadata from synapse (Travaglini et al (2020) _Nature_)
+## Download Human Lung Cell Atlas data and metadata from hsc.stanford.edu (Travaglini et al (2020) _Nature_)
 This dataset contains ~75,000 cells captured using 10x (90%) and SmartSeq2 (10%) from the lung of 3 human patients.
 
 ```bash
-synapse get syn21560510
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_10x_raw.rds
 
-synapse get syn21560511
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_10x_raw.h5ad
 
-synapse get syn21560409
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_facs_raw.rds
 
-synapse get syn21560410
+wget http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_facs_raw.h5ad
 ```
 
 ## Open and complete BIOC281/Classes/3/Tutorial 3 - Seurat.ipypnb
@@ -120,5 +119,4 @@ salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-3:00:00 --begin=
 **Note:** Sherlock users should use --quit=normal as Sherlock does not have an interactive quality of service like FarmShare.
 
 You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the rice node# (reice\<xx\>) w
-here your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely cl
-ose your terminal window. See you next class!
+here your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely close your terminal window. See you next class!
