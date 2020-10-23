@@ -253,7 +253,9 @@ cd R-patched/tools/ && ./rsync-recommended
 ./link-recommended && cd ..
 ./configure --prefix=$HOME/apps/R AR=gcc-ar NM=gcc-nm RANLIB=gcc-ranlib LDFLAGS='-L/scg/apps/software/gcc/9.2.0-centos_7/lib64 -L/scg/apps/software/gcc/9.2.0-centos_7/lib64' CFLAGS=-I/scg/apps/software/gcc/9.2.0-centos_7/include --enable-lto
 make -j128 && make install && cd
+rm -rf R-patched/
 
+## setup R profile and environment
 echo -e "AR=gcc-ar\nNM=gcc-nm\nRANLIB=gcc-ranlib" > ~/.Renviron
 echo -e "options(Ncpus = 30)\nmessage(\"\\\033[38;05;208mHi <SUNetID>, welcome to R...\\\033[00m\")\nSys.setenv(RETICULATE_PYTHON = \"/home/<SUNetID>/miniconda3/envs/singlecell/bin/python\")" >> ~/.Rprofile
 
