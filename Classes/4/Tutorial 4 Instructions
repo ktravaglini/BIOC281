@@ -1,0 +1,17 @@
+## In the base environment Start R and install packages
+```bash
+BiocManager::install("velocyto-team/velocyto.R")
+BiocManager::install("kharchenkolab/pagoda2")
+```
+
+## download data
+```bash
+cd ~/BIOC281/Classes/4/
+wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_BM_Smartseq_phenotable.txt
+wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_bonemarrow_10x_expr.txt 
+wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_bonemarrow_10x_subsetted.loom
+wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_bonemarrow_10x_metadata.txt
+```
+
+
+

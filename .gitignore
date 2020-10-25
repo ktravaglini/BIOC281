@@ -7,3 +7,6 @@ Classes/2/reads/*
 Classes/2/RefSeq_Oct2020/*
 Classes/2/STAResults/*
 Classes/2/STARindex_2p/*
+Classes/4/*.txt
+Classes/4/*.pdf
+Classes/4/*.loom
