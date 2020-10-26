@@ -48,6 +48,8 @@ pip install fa2
 
 ## Pull the GitHub repository
 ```bash
+cd ~/BIOC281
+
 git pull
 ```
 
