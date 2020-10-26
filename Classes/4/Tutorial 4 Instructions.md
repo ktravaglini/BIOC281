@@ -1,5 +1,5 @@
 # Tutorial 4
-Today we will be working through two notebooks, one written in R and the other in python, that use the PAGA, velocyto, monocle3 and CytoTRACE, respectively, to map the dynamic process of hematopoietic stem cell differentiation to granulocytes and monocytes (two of the main immune cell lineages). 
+Today we will be working through two notebooks, one written in R and the other in python, that use the PAGA, velocyto, monocle3 and CytoTRACE, respectively, to map the dynamic process of hematopoietic stem cell (HSC) differentiation to granulocytes and monocytes (two of the main immune cell lineages). 
 
 To begin the tutorials, we need to access dedicated resources on Stanford FarmShare, launch a jupyer notebbook, then download data from Tabula Muris Consortium et al (2018) _Nature_.
 
