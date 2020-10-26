@@ -1,7 +1,7 @@
 # Tutorial 4
-Today we will be working through two notebooks, one written in R and the other in python, that use the monocle3 , PAGA, velocyto, and CytoTRACE, respectively, to map the dynamic process of neurogenesis in the human forebrain.
+Today we will be working through two notebooks, one written in R and the other in python, that use the PAGA, velocyto, monocle3 and CytoTRACE, respectively, to map the dynamic process of hematopoietic stem cell differentiation to granulocytes and monocytes (two of the main immune cell lineages). 
 
-To begin the tutorials, we need to request dedicated resources on Stanford FarmShare, launch a jupyer notebbook, then download the from La Manno et al (2018) _Nature_.
+To begin the tutorials, we need to access dedicated resources on Stanford FarmShare, launch a jupyer notebbook, then download data from Tabula Muris Consortium et al (2018) _Nature_.
 
 ## Login to FarmShare
 ```bash
@@ -36,19 +36,6 @@ tmux
 ```
 You should now see the green tmux bar along the bottom of your terminal.
 
-## Start R
-```bash
-R
-```
-
-## Install pagoda2 and quit R
-**Note:** When asked about updating packages decline with "3"
-```R
-BiocManager::install("kharchenkolab/pagoda2")
-
-q()
-```
-
 ## Activate the single cell environment
 ```bash
 conda activate singlecell
@@ -57,6 +44,11 @@ conda activate singlecell
 ## Install ForceAtlas2
 ```bash
 pip install fa2
+```
+
+## Pull the GitHub repository
+```bash
+git pull
 ```
 
 ## Start jupyter
@@ -76,30 +68,21 @@ ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <P
 ```
 
 ## Login to jupyter in your browser, open a Terminal window, and activate the single cell environment
-```bash
-conda activate singlecell
-```
-
-## Pull the GitHub repository
-```bash
-git pull
-```
 
 ## Navigate to the current tutorial folder
 ```bash
 cd ~/BIOC281/Classes/4
 ```
+
 **Note:** On sherlock run
 ```bash
 cd $GROUP_HOME/BIOC281/Classes/4
 ```
 
-## Download the La Manno et al data as a loom file (a common format like RDS, h5ad, etc)
-This dataset contains ~75,000 cells captured using 10x (90%) and SmartSeq2 (10%) from the lung of 3 human patients. See Travaglini et al (2020) _Nature_ (in press, _bioRxiv_) for details.
+## Download the Bone Marrow 10x dataset from Tabula Muris
+This dataset contains ~3,000 cells captured using 10x from two mice. See Tabula Muris Consortium et al (2018) _Nature_ for details.
 
 ```bash
-wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_BM_Smartseq_phenotable.txt
-wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_bonemarrow_10x_expr.txt 
 wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_bonemarrow_10x_subsetted.loom -O MACA_bonemarrow_10x.loom 
 wget --quiet http://hsc.stanford.edu/resources/DataObjects/MACA_bonemarrow_10x_metadata.txt
 ```
@@ -109,3 +92,21 @@ When finished, please save the outputs of Tutorial 4 - PAGA and velocyto.ipynb (
 
 ## Open and complete BIOC281/Classes/4/Tutorial 4 - monocle3 and CytoTRACE.ipypnb
 When finished, please save the outputs of Tutorial 4 - monocle3 and CytoTRACE.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
+
+### Relinquish the current wheat allocation
+After running the command below, your terminal should switch back to rice from wheat.
+```bash
+exit
+```
+
+### Run salloc
+Start "tmux" session on rice and then then request resources
+```bash
+tmux
+## You should see the green tmux bar. Now run salloc requesting resources for the next class
+salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-5:00:00 --begin="13:30:00 10/28/20" --qos=interactive srun --pty bash -i -l
+```
+**Note:** Sherlock users should use --quit=normal as Sherlock does not have an interactive quality of service like FarmShare.
+
+You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the rice node (**rice\<xx\>**) where your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely close your terminal window. See you next class!
+
