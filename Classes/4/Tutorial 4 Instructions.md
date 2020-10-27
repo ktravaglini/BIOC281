@@ -43,11 +43,13 @@ conda activate singlecell
 
 ## Install ForceAtlas2
 ```bash
-pip install fa2
+pip install fa2 loompy
 ```
 
 ## Pull the GitHub repository
 ```bash
+cd ~/BIOC281
+
 git pull
 ```
 
