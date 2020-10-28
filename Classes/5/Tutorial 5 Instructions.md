@@ -104,7 +104,7 @@ wget --quiet http://bioinfo.life.hust.edu.cn/static/AnimalTFDB3/download/Homo_sa
 ### Download a list of gene associated with mendelian diseases from OMIM
 Visit https://www.omim.org/downloads and complete the download request form. Indicate "Use in a class on single cell expression analysis" as your description for using OMIM. Check your email and copy the link for genemap2.txt
 ```bash
-wget --quiet <URL>/mgenemap2.txt -O OMIM.tsv
+wget --quiet <URL>/genemap2.txt -O OMIM.tsv
 ```
 
 ### Download a list of enzymes from ExPASy
