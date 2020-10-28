@@ -11,3 +11,6 @@ Classes/4/*.txt
 Classes/4/*.pdf
 Classes/4/*.loom
 Classes/4/*.csv
+Classes/5/*.csv
+Classes/5/*.h5ad
+Classes/5/dbs/*

@@ -29,12 +29,32 @@ You can tell if your terminal has switched from something like "(base) \<SUNetID
 **Note:** Sherlock users will be connecting to a compute node instead of wheat.
 
 Just like last week we will start a persistant session with "tmux". In case we lose connection, we can login again to the same assigned wheat node as above
-and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" ses
-sion you just started is specific to you and is running only on the wheat\<xx\> (or rice\<xx\> node as we did in the first tutorial) where you started it
+and reattach to the same persistantly running "tmux" session. "tmux" session is specific to a given compute node not cluster-wide, therefore, the "tmux" session you just started is specific to you and is running only on the wheat\<xx\> (or rice\<xx\> node as we did in the fourth tutorial) where you started it
 ```bash
 tmux
 ```
 You should now see the green tmux bar along the bottom of your terminal.
+
+## Activate "singlecell" environment
+```bash
+conda activate singlecell
+```
+
+## Start jupyter
+```bash
+jupyter lab --no-browser
+```
+**Note:** Sherlock users will need to specify a port between 49152-65335 by adding --port=<Port#> as before.
+
+## Create an SSH tunnel (on your system)
+```bash
+ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
+```
+
+**Note:** Sherlock users will need the more complex tunneling command they have used before. The last \<shXX-XXnXX\> part comes from the node they are on, it is the part of your command prompt bolded here: (singlecell) [\<SUNetID\>@**sh03-01n52** ~]$
+```
+ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <Port#>:localhost:<Port#> -N <shXX-XXnXX>
+```
 
 ### Login to jupyter in your browser, open a Terminal window (File > New... > Terminal), and activate the single cell environment
 ```bash
@@ -63,7 +83,7 @@ cd $HOME/BIOC281/Classes/5
 cd $GROUP_HOME/BIOC281/Classes/5
 ```
 
-## Download the HLCA FACS data and metadata from all three patients as CSVs
+## Download the HLCA SmartSeq2 data and metadata from all three patients as CSVs
 
 ```bash
 wget --quiet http://hsc.stanford.edu/resources/DataObjects/krasnow_hlca_facs_counts.csv
@@ -103,24 +123,6 @@ wget --quiet https://www.guidetopharmacology.org/DATA/ligands.tsv -O GtP_ligands
 wget --quiet https://www.guidetopharmacology.org/DATA/GtP_to_HGNC_mapping.tsv
 ```
 
-## Start jupyter
-```bash
-jupyter lab --no-browser
-```
-**Note:** Sherlock users will need to specify a port between 49152-65335 by adding --port=<Port#> as before.
-
-## Create an SSH tunnel (on your system)
-```bash
-ssh -N -f -L <Port>:localhost:<Port> <SUNetID>@wheat<XX>.stanford.edu
-```
-
-**Note:** Sherlock users will need the more complex tunneling command they have used before. The last \<shXX-XXnXX\> part comes from the node they are on, it is the part of your command prompt bolded here: (singlecell) [\<SUNetID\>@**sh03-01n52** ~]$
-```
-ssh -L <Port#>:localhost:<Port#> <SUNetID>@login.sherlock.stanford.edu ssh -L <Port#>:localhost:<Port#> -N <shXX-XXnXX>
-```
-
-## Login to jupyter in your browser, open a Terminal window, and activate the single cell environment
-
 ## Open and complete BIOC281/Classes/5/Tutorial 5.ipypnb
 When finished, please save the outputs of Tutorial 5.ipynb (File > Export Notebook As... > Export Notebook to HTML) when you have completed it and upload it to Canvas.
 
@@ -134,6 +136,6 @@ exit
 ```bash
 salloc --ntasks-per-node=1 --cpus-per-task=4 --mem=30G --time=0-5:00:00 --begin="13:30:00 10/30/20" --qos=interactive srun --pty bash -i -l
 ```
-**Note:** Sherlock users should use --quit=normal as Sherlock does not have an interactive quality of service like FarmShare.
+**Note:** Sherlock users should use --qos=normal as Sherlock does not have an interactive quality of service like FarmShare.
 
 You can now detach from the "tmux" with control+b and then press "d". The green bar on the bottom should disappear. Note down the rice node (**rice\<xx\>**) where your "tmux" session is running (in case we need to get back to it) and the session ID (usually just a single session==0). After that, you can safely close your terminal window. See you next class!
