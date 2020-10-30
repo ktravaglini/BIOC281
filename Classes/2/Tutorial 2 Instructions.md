@@ -517,6 +517,61 @@ ln -sv  ~/BIOC281/Classes/2/RefSeq_Oct2020/GenomeIndex/kallistoIndex/hg38.refSeq
 kallisto quant -t 4 -i hg38.refSeq.transcriptome.ERCC.idx -o output -b 100 <(zcat male-trimmed-pair1.fastq.gz) <(zcat male-trimmed-pair2.fastq.gz)
 ```
 
+## Create a script to get combined counts table for all cells from STAR (htseq) counts using your favorite text editor and call it "tabulate_counts_stats_scr"
+```bash
+#!/bin/bash
+
+# set directory paths
+DIR=$HOME/BIOC281/Classes/2/STAResults
+
+# Make tmporary directory and sub-directories 
+mkdir -p ./tmp/{read_stats,gene_counts}
+
+function apply() {
+#Replace original header with new headers (i.e. unique single cell ID) for gene counts files
+tail -n+5 <(zcat $DIR/$1_1p/$1.1p.ReadsPerGene.out.tab.gz) | sed "1i gene_id\t$1" > ./tmp/gene_counts/$1.1p.ReadsPerGene.out.tab.gene_counts_single
+
+#Extract uniquely mapped reads number and uniquely mapped reads percentage and add unique single cell ID header
+sed -n "9,10p" <(zcat $DIR/$1_1p/$1.1p.Log.final.out.gz) | sed "1i Read Statistics\t$1" > ./tmp/read_stats/$1.1p.Log.final.out.tab.readstats
+}
+
+function allCountsAndStats {
+#Collate all gene counts files into one 
+awk 'BEGIN {FS = "\t"; OFS="\t"}; NR==FNR{ s[$1]=$1 FS $2; next } {s[$1] = s[$1] FS $2;} END{for(i in s) {print s[i]}}' ./tmp/gene_counts/*.gene_counts_single > ./tmp/gene_counts/gene_counts_all.tsv
+    
+sed -ie 's/gene_id/01_gene_id/g' ./tmp/gene_counts/gene_counts_all.tsv
+sort ./tmp/gene_counts/gene_counts_all.tsv -o ./tmp/gene_counts/gene_counts_sorted_all.tsv
+
+#Collate all read stats files into one
+awk 'BEGIN {FS = "\t"; OFS="\t"}; NR==FNR{ s[$1]=$1 FS $2; next} {s[$1] = s[$1] FS $2;} END{for(i in s) {print s[i]}}' ./tmp/read_stats/*.readstats > ./tmp/read_stats/all_read_stats.tsv
+sed 's/^[ \t]*//' ./tmp/read_stats/all_read_stats.tsv > ./tmp/read_stats/read_stats_all.tsv
+    
+#Collate all gene counts and all read stats
+cat ./tmp/read_stats/read_stats_all.tsv ./tmp/gene_counts/gene_counts_sorted_all.tsv > ./tmp/stats_and_readcountspergene.tsv
+
+# compress the output files
+gzip --best -v ./tmp/*.tsv
+
+# Copy back important files and cleanup
+cp -a ./tmp/*.gz $DIR
+
+# Remove tmporary directory
+rm -rf ./tmp
+exit 0
+}
+
+apply   male
+apply   female
+
+allCountsAndStats
+```
+
+## Run the script to create counts table
+```bash
+bash tabulate_counts_stats_scr
+```
+
+
 ### Decompress STAR results
 ```bash
 gzip -d ~/BIOC281/Classes/2/STAResults/male_1p/male.1p.ReadsPerGene.out.tab.gz
